@@ -1,5 +1,6 @@
 package source.com.thenitro.isometric.world.layers {
 	import com.thenitro.ngine.pool.IReusable;
+	import com.thenitro.ngine.pool.Pool;
 	
 	import source.com.thenitro.isometric.world.IsometricWorld;
 	import source.com.thenitro.isometric.world.objects.IsometricDisplayObject;
@@ -7,6 +8,8 @@ package source.com.thenitro.isometric.world.layers {
 	import starling.display.Sprite;
 	
 	public class IsometricLayer implements IReusable {
+		private static var _pool:Pool = Pool.getInstance();
+		
 		private var _canvas:Sprite;
 		
 		private var _array:Array;
@@ -78,6 +81,8 @@ package source.com.thenitro.isometric.world.layers {
 			
 			for each (var object:IsometricDisplayObject in _array) {
 				remove(object);
+				
+				_pool.put(object);
 			}
 			
 			_array.length = 0;
