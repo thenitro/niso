@@ -17,13 +17,7 @@ package source.com.thenitro.isometric.world.objects {
 	import starling.display.Sprite;
 	import starling.textures.Texture;
 	
-	public final class IsometricDisplayObject implements IReusable {
-		[Embed(source="test_tile128.png", mimeType="image/png")]
-		private static const TestTile:Class;
-		
-		private static const FLOOR_BITMAP:Bitmap   = new TestTile();
-		private static const FLOOR_TEXTURE:Texture = Texture.fromBitmap(FLOOR_BITMAP);
-		
+	public class IsometricDisplayObject implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();
 		
 		private var _screenPosition:Point2D;
@@ -130,14 +124,7 @@ package source.com.thenitro.isometric.world.objects {
 		};
 		
 		protected function init():DisplayObject {
-			var sprite:Sprite = new Sprite();			
-			var image:Image = new Image(FLOOR_TEXTURE);
-				image.pivotX = image.width / 2;
-				image.pivotY = image.height / 2;
-			
-			sprite.addChild(image);
-			
-			return sprite;
+			return null;
 		};
 	}
 }

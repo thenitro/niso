@@ -8,6 +8,8 @@ package source.com.thenitro.isometric.world {
 	import source.com.thenitro.isometric.world.objects.IsometricDisplayObject;
 	
 	import starling.display.Sprite;
+	import starling.events.Event;
+	import starling.events.ResizeEvent;
 	
 	public final class IsometricWorld {
 		private static var _pool:Pool = Pool.getInstance();
@@ -19,7 +21,18 @@ package source.com.thenitro.isometric.world {
 		
 		public function IsometricWorld() {
 			_canvas = new Sprite();
+			_canvas.addEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
+			
 			_layers = new Dictionary();
+		};
+		
+		private function addedToStageEventHandler(pEvent:Event):void {
+			_canvas.removeEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
+			_canvas.stage.addEventListener(ResizeEvent.RESIZE, resizeEventHandler);
+		};
+		
+		private function resizeEventHandler(pEvent:ResizeEvent):void {
+			relocate();
 		};
 		
 		public function get geometry():IsometricGeometry {
@@ -40,8 +53,6 @@ package source.com.thenitro.isometric.world {
 			
 			_canvas.x = centerX;
 			_canvas.y = centerY;
-			
-			trace("IsometricWorld.relocate()", _canvas.x, _canvas.y);
 		};
 		
 		public function addLayer(pLayer:IsometricLayer):void {
