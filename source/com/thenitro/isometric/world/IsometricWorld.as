@@ -48,8 +48,8 @@ package source.com.thenitro.isometric.world {
 		};
 		
 		public function relocate():void {
-			var centerX:Number =  _canvas.stage.stageWidth / 2;
-			var centerY:Number = (_canvas.stage.stageHeight - _canvas.height) / 2;
+			var centerX:int = Math.ceil(_canvas.stage.stageWidth / 2);
+			var centerY:int = Math.ceil((_canvas.stage.stageHeight - _canvas.height) / 2);
 			
 			_canvas.x = centerX;
 			_canvas.y = centerY;

@@ -17,8 +17,6 @@ package source.com.thenitro.isometric.world.objects {
 				return null;
 			}
 			
-			trace("IsometricSprite.setTexture(pTexture)", pTexture);
-			
 			_view.removeChildren(0, -1, true);
 			
 			var image:Image = new Image(pTexture);
