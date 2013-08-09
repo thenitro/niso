@@ -18,8 +18,13 @@ package com.thenitro.isometric.world.objects {
 		private var _layer:IsometricLayer;
 		
 		private var _view:DisplayObject;
+		private var _behavior:IsometricBehavior;
+		
+		private var _alpha:Number;
 		
 		public function IsometricDisplayObject() {
+			_alpha = 1.0;
+			
 			_screenPosition = _pool.get(Point2D) as Point2D;
 			
 			if (!_screenPosition) {
@@ -77,12 +82,29 @@ package com.thenitro.isometric.world.objects {
 			return _isometricPosition.z;
 		};
 		
+		public function set alpha(pValue:Number):void {
+			_alpha = pValue;
+			
+			if (_view) {
+				_view.alpha = _alpha;
+			}
+		};
+		
+		public function get alpha():Number {
+			return _alpha;
+		};
+		
 		public function get depth():Number {
 			return _screenPosition.depth;
 		};
 		
 		public function setLayer(pLayer:IsometricLayer):void {
 			_layer = pLayer;
+		};
+		
+		public function setBehavior(pBehavior:IsometricBehavior):void {
+			_behavior = pBehavior;
+			_behavior.setObject(this);
 		};
 		
 		public function updateScreenPosition():void {
@@ -94,10 +116,12 @@ package com.thenitro.isometric.world.objects {
 			
 			_view.x = _screenPosition.x;
 			_view.y = _screenPosition.y;
+			
+			_view.alpha = _alpha;
 		};
 		
 		public function poolPrepare():void {
-			
+			_alpha = 1.0;
 		};
 		
 		public function dispose():void {

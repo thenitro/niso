@@ -3,12 +3,14 @@ package com.thenitro.isometric.tiled {
 	import com.thenitro.isometric.world.IsometricWorld;
 	import com.thenitro.isometric.world.layers.IsometricLayer;
 	import com.thenitro.isometric.world.layers.IsometricLayerSortingType;
+	import com.thenitro.isometric.world.objects.IsometricBehavior;
 	import com.thenitro.isometric.world.objects.IsometricSprite;
 	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.utils.getDefinitionByName;
 	
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
@@ -103,6 +105,15 @@ package com.thenitro.isometric.tiled {
 					object.setTexture(getTexture(objectAbstract.@gid));
 					object.x = objectAbstract.@x - _world.geometry.tileSize;
 					object.z = objectAbstract.@y - _world.geometry.tileSize;
+					
+				if (String(objectAbstract.@type).length) {
+					trace("TiledLoader.parseLayer(pData, pLayerID)", objectAbstract.@type);
+					
+					var currentClass:Class         = getDefinitionByName(objectAbstract.@type) as Class;
+					var instance:IsometricBehavior = new currentClass(); 
+					
+					object.setBehavior(instance);
+				}
 				
 				_world.addObject(pLayerID, object);
 			}
