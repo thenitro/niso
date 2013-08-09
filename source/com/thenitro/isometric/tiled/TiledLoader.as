@@ -106,9 +106,7 @@ package com.thenitro.isometric.tiled {
 					object.x = objectAbstract.@x - _world.geometry.tileSize;
 					object.z = objectAbstract.@y - _world.geometry.tileSize;
 					
-				if (String(objectAbstract.@type).length) {
-					trace("TiledLoader.parseLayer(pData, pLayerID)", objectAbstract.@type);
-					
+				if (String(objectAbstract.@type).length) {					
 					var currentClass:Class         = getDefinitionByName(objectAbstract.@type) as Class;
 					var instance:IsometricBehavior = new currentClass(); 
 					
@@ -121,7 +119,7 @@ package com.thenitro.isometric.tiled {
 		
 		private function getTexture(pID:int):Texture {
 			for (var i:uint = 0; i < _tilesets.length; i++) {
-				if (pID > _tilesets[i].maxID && _tilesets[i].firstID < pID) {
+				if (pID >= _tilesets[i].maxID && _tilesets[i].firstID < pID) {
 					continue;
 				}
 				

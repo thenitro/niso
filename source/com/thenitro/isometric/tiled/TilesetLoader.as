@@ -41,7 +41,7 @@ package com.thenitro.isometric.tiled {
 		};
 		
 		public function get maxID():uint {
-			return _cutter.maxID;
+			return _firstID + _cutter.maxID;
 		};
 		
 		public function getItem(pIndex:uint):Texture {
