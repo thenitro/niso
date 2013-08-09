@@ -46,33 +46,13 @@ package com.thenitro.isometric.tiled {
 		private function buildLevel():void {
 			var layerID:uint = 0;
 			
-			for each (var layerAbstact:XML in _data..layer) {
-				var indexX:uint = 0;
-				var indexZ:uint = 0;
-				
-				var layer:IsometricLayer = new IsometricLayer();
-					layer.init(layerID, false);
-					
-				_world.addLayer(layer);
-				
-				trace("TiledLoader.buildLevel()", layerAbstact.@name);
-				
-				for each (var tileAbstract:XML in layerAbstact.data..tile) {
-					if (tileAbstract.@gid != 0) {
-						var object:IsometricSprite = new IsometricSprite();
-							object.setTexture(getTexture(tileAbstract.@gid));
-							object.x = indexX * _world.geometry.tileSize;
-							object.z = indexZ * _world.geometry.tileSize;
-						
-						_world.addObject(layerID, object);
-					}
-					
-					indexX++;
-					
-					if (indexX >= layerAbstact.@width) {
-						indexX = 0;
-						indexZ++;
-					}
+			for each (var child:XML in _data.children()) {
+				if (child.name() == 'layer') {
+					parseLayer(child, layerID);
+				} else if (child.name() == 'objectgroup') {
+					parseObjectGroup(child, layerID);
+				} else {
+					continue;
 				}
 				
 				layerID++;
@@ -81,10 +61,52 @@ package com.thenitro.isometric.tiled {
 			_world.relocate();
 		};
 		
+		private function parseLayer(pData:XML, pLayerID:uint):void {
+			var indexX:uint = 0;
+			var indexZ:uint = 0;
+			
+			var layer:IsometricLayer = new IsometricLayer();
+				layer.init(pLayerID, false);
+			
+			_world.addLayer(layer);
+			
+			for each (var tileAbstract:XML in pData..tile) {
+				if (tileAbstract.@gid != 0) {
+					var object:IsometricSprite = new IsometricSprite();
+						object.setTexture(getTexture(tileAbstract.@gid));
+						object.x = indexX * _world.geometry.tileSize;
+						object.z = indexZ * _world.geometry.tileSize;
+					
+					_world.addObject(pLayerID, object);
+				}
+				
+				indexX++;
+				
+				if (indexX >= pData.@width) {
+					indexX = 0;
+					indexZ++;
+				}
+			}
+		};
+		
+		private function parseObjectGroup(pData:XML, pLayerID:uint):void {
+			var layer:IsometricLayer = new IsometricLayer();
+				layer.init(pLayerID, false);
+			
+			_world.addLayer(layer);
+			
+			for each (var objectAbstract:XML in pData..object) {				
+				var object:IsometricSprite = new IsometricSprite();
+					object.setTexture(getTexture(objectAbstract.@gid));
+					object.x = objectAbstract.@x - _world.geometry.tileSize;
+					object.z = objectAbstract.@y - _world.geometry.tileSize;
+				
+				_world.addObject(pLayerID, object);
+			}
+		};
+		
 		private function getTexture(pID:int):Texture {
 			for (var i:uint = 0; i < _tilesets.length; i++) {
-				trace("TiledLoader.getTexture(pID)", _tilesets[i].maxID, _tilesets[i].firstID, pID);
-				
 				if (pID > _tilesets[i].maxID && _tilesets[i].firstID < pID) {
 					continue;
 				}
