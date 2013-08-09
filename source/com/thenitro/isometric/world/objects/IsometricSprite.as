@@ -1,4 +1,4 @@
-package source.com.thenitro.isometric.world.objects {
+package com.thenitro.isometric.world.objects {
 	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.display.Sprite;

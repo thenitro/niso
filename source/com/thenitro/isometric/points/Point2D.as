@@ -1,4 +1,4 @@
-package source.com.thenitro.isometric.points {
+package com.thenitro.isometric.points {
 	import com.thenitro.ngine.pool.IReusable;
 	import com.thenitro.ngine.pool.Pool;
 

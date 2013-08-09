@@ -1,13 +1,13 @@
-package source.com.thenitro.isometric.tiled {
+package com.thenitro.isometric.tiled {
+	import com.thenitro.isometric.geom.IsometricGeometry;
+	import com.thenitro.isometric.world.IsometricWorld;
+	import com.thenitro.isometric.world.layers.IsometricLayer;
+	import com.thenitro.isometric.world.objects.IsometricSprite;
+	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	
-	import source.com.thenitro.isometric.geom.IsometricGeometry;
-	import source.com.thenitro.isometric.world.IsometricWorld;
-	import source.com.thenitro.isometric.world.layers.IsometricLayer;
-	import source.com.thenitro.isometric.world.objects.IsometricSprite;
 	
 	import starling.events.Event;
 	import starling.events.EventDispatcher;

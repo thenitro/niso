@@ -1,11 +1,10 @@
-package source.com.thenitro.isometric.world.layers {
+package com.thenitro.isometric.world.layers {
+	import com.thenitro.isometric.points.Point2D;
+	import com.thenitro.isometric.points.Point3D;
+	import com.thenitro.isometric.world.IsometricWorld;
+	import com.thenitro.isometric.world.objects.IsometricDisplayObject;
 	import com.thenitro.ngine.pool.IReusable;
 	import com.thenitro.ngine.pool.Pool;
-	
-	import source.com.thenitro.isometric.points.Point2D;
-	import source.com.thenitro.isometric.points.Point3D;
-	import source.com.thenitro.isometric.world.IsometricWorld;
-	import source.com.thenitro.isometric.world.objects.IsometricDisplayObject;
 	
 	import starling.display.Sprite;
 	

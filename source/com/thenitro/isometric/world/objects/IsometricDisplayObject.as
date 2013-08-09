@@ -1,21 +1,11 @@
-package source.com.thenitro.isometric.world.objects {
-	import com.thenitro.ngine.math.Geometry;
+package com.thenitro.isometric.world.objects {
+	import com.thenitro.isometric.points.Point2D;
+	import com.thenitro.isometric.points.Point3D;
+	import com.thenitro.isometric.world.layers.IsometricLayer;
 	import com.thenitro.ngine.pool.IReusable;
 	import com.thenitro.ngine.pool.Pool;
 	
-	import flash.display.Bitmap;
-	import flash.geom.Point;
-	
-	import source.com.thenitro.isometric.geom.IsometricGeometry;
-	import source.com.thenitro.isometric.points.Point2D;
-	import source.com.thenitro.isometric.points.Point3D;
-	import source.com.thenitro.isometric.world.layers.IsometricLayer;
-	
 	import starling.display.DisplayObject;
-	import starling.display.Image;
-	import starling.display.Quad;
-	import starling.display.Sprite;
-	import starling.textures.Texture;
 	
 	public class IsometricDisplayObject implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();

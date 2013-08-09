@@ -1,10 +1,7 @@
-package source.com.thenitro.isometric.geom {
+package com.thenitro.isometric.geom {
+	import com.thenitro.isometric.points.Point2D;
+	import com.thenitro.isometric.points.Point3D;
 	import com.thenitro.ngine.pool.Pool;
-	
-	import flash.display.PixelSnapping;
-	
-	import source.com.thenitro.isometric.points.Point2D;
-	import source.com.thenitro.isometric.points.Point3D;
 	
 	public final class IsometricGeometry {
 		public static const RATIO:Number = Math.sin(Math.PI / 6);

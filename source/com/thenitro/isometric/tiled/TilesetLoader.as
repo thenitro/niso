@@ -1,4 +1,4 @@
-package source.com.thenitro.isometric.tiled {
+package com.thenitro.isometric.tiled {
 	import com.thenitro.ngine.textures.SpriteSheetCutter;
 	
 	import flash.display.Bitmap;

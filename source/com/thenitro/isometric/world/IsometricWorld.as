@@ -1,11 +1,10 @@
-package source.com.thenitro.isometric.world {
+package com.thenitro.isometric.world {
+	import com.thenitro.isometric.geom.IsometricGeometry;
+	import com.thenitro.isometric.world.layers.IsometricLayer;
+	import com.thenitro.isometric.world.objects.IsometricDisplayObject;
 	import com.thenitro.ngine.pool.Pool;
 	
 	import flash.utils.Dictionary;
-	
-	import source.com.thenitro.isometric.geom.IsometricGeometry;
-	import source.com.thenitro.isometric.world.layers.IsometricLayer;
-	import source.com.thenitro.isometric.world.objects.IsometricDisplayObject;
 	
 	import starling.display.Sprite;
 	import starling.events.Event;
