@@ -9,6 +9,8 @@ package com.thenitro.isometric.world.layers {
 	import starling.display.Sprite;
 	
 	public class IsometricLayer implements IReusable {
+		
+		
 		private static var _pool:Pool = Pool.getInstance();
 		
 		private var _canvas:Sprite;
@@ -19,6 +21,8 @@ package com.thenitro.isometric.world.layers {
 		private var _world:IsometricWorld;
 		
 		private var _useLuft:Boolean;
+		
+		private var _sortingType:uint;
 		
 		public function IsometricLayer() {
 			_canvas = new Sprite();
@@ -41,9 +45,14 @@ package com.thenitro.isometric.world.layers {
 			return _world;
 		};
 		
-		public function init(pID:uint, pUseLuft:Boolean):void {
-			_id      = pID;
-			_useLuft = pUseLuft;
+		public function get sortingType():uint {
+			return _sortingType;
+		};
+		
+		public function init(pID:uint, pUseLuft:Boolean, pSortingType:uint):void {
+			_id          = pID;
+			_useLuft     = pUseLuft;
+			_sortingType = pSortingType;
 		};
 		
 		public function setWorld(pWorld:IsometricWorld):void {
@@ -75,12 +84,20 @@ package com.thenitro.isometric.world.layers {
 			pObject.updateScreenPosition();
 			
 			_canvas.addChild(pObject.view);
+			
+			if (_sortingType == IsometricLayerSortingType.ON_CHANGE) {
+				sort();
+			}
 		};
 		
 		public function remove(pObject:IsometricDisplayObject):void {
 			_array.splice(_array.indexOf(pObject), 1);
 			
 			_canvas.removeChild(pObject.view);
+			
+			if (_sortingType == IsometricLayerSortingType.ON_CHANGE) {
+				sort();
+			}
 		};
 		
 		public function sort():void {

@@ -1,6 +1,7 @@
 package com.thenitro.isometric.world {
 	import com.thenitro.isometric.geom.IsometricGeometry;
 	import com.thenitro.isometric.world.layers.IsometricLayer;
+	import com.thenitro.isometric.world.layers.IsometricLayerSortingType;
 	import com.thenitro.isometric.world.objects.IsometricDisplayObject;
 	import com.thenitro.ngine.pool.Pool;
 	
@@ -28,10 +29,15 @@ package com.thenitro.isometric.world {
 		private function addedToStageEventHandler(pEvent:Event):void {
 			_canvas.removeEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
 			_canvas.stage.addEventListener(ResizeEvent.RESIZE, resizeEventHandler);
+			_canvas.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
 		};
 		
 		private function resizeEventHandler(pEvent:ResizeEvent):void {
 			relocate();
+		};
+		
+		private function enterFrameEventHandler(pEvent:Event):void {
+			sortAll();
 		};
 		
 		public function get geometry():IsometricGeometry {
@@ -89,6 +95,14 @@ package com.thenitro.isometric.world {
 			
 			for (var layerID:Object in _layers) {
 				delete _layers[layerID];
+			}
+		};
+		
+		private function sortAll():void {
+			for each (var layer:IsometricLayer in _layers) {
+				if (layer.sortingType == IsometricLayerSortingType.ALWAYS) {
+					layer.sort();	
+				}
 			}
 		};
 	};

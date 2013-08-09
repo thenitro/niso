@@ -2,6 +2,7 @@ package com.thenitro.isometric.tiled {
 	import com.thenitro.isometric.geom.IsometricGeometry;
 	import com.thenitro.isometric.world.IsometricWorld;
 	import com.thenitro.isometric.world.layers.IsometricLayer;
+	import com.thenitro.isometric.world.layers.IsometricLayerSortingType;
 	import com.thenitro.isometric.world.objects.IsometricSprite;
 	
 	import flash.events.Event;
@@ -66,7 +67,7 @@ package com.thenitro.isometric.tiled {
 			var indexZ:uint = 0;
 			
 			var layer:IsometricLayer = new IsometricLayer();
-				layer.init(pLayerID, false);
+				layer.init(pLayerID, false, IsometricLayerSortingType.ON_DEMAND);
 			
 			_world.addLayer(layer);
 			
@@ -87,11 +88,13 @@ package com.thenitro.isometric.tiled {
 					indexZ++;
 				}
 			}
+			
+			layer.sort();
 		};
 		
 		private function parseObjectGroup(pData:XML, pLayerID:uint):void {
 			var layer:IsometricLayer = new IsometricLayer();
-				layer.init(pLayerID, false);
+				layer.init(pLayerID, false, IsometricLayerSortingType.ALWAYS);
 			
 			_world.addLayer(layer);
 			
