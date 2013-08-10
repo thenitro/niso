@@ -9,8 +9,6 @@ package com.thenitro.isometric.world.layers {
 	import starling.display.Sprite;
 	
 	public class IsometricLayer implements IReusable {
-		
-		
 		private static var _pool:Pool = Pool.getInstance();
 		
 		private var _canvas:Sprite;
@@ -49,6 +47,15 @@ package com.thenitro.isometric.world.layers {
 			return _sortingType;
 		};
 		
+		/**
+		 * 
+		 * @param pID          - id of layer, better use ordered layer id's
+		 * @param pUseLuft     - luft for creating mountains and stuff
+		 * @param pSortingType - IsometricLayerSortingType.ON_DEMAND - manualy sort when you need it	
+		 *						 IsometricLayerSortingType.ON_CHANGE - sort when you add or remove element to layer
+		 *					     IsometricLayerSortingType.IsometricLayerSortingType.ALWAY - sort on enterframe
+		 * 
+		 */		
 		public function init(pID:uint, pUseLuft:Boolean, pSortingType:uint):void {
 			_id          = pID;
 			_useLuft     = pUseLuft;
