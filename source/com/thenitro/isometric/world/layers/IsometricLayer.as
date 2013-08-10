@@ -6,6 +6,7 @@ package com.thenitro.isometric.world.layers {
 	import com.thenitro.ngine.pool.IReusable;
 	import com.thenitro.ngine.pool.Pool;
 	
+	import starling.display.QuadBatch;
 	import starling.display.Sprite;
 	
 	public class IsometricLayer implements IReusable {

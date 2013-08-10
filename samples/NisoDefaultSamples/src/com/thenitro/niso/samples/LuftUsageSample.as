@@ -113,7 +113,6 @@ package com.thenitro.niso.samples {
 			world.addObject(layer3.id, object);
 			
 			//amazing! =)
-			
 			world.relocate();
 		};
 	};

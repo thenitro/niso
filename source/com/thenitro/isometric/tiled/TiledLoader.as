@@ -183,6 +183,8 @@ package com.thenitro.isometric.tiled {
 				_tilesets.sort(sortTilesetLoaders);
 				
 				buildLevel();
+				
+				dispatchEventWith(starling.events.Event.COMPLETE);
 			}
 		};
 	};
