@@ -61,7 +61,8 @@ package com.thenitro.niso.samples {
 					object.x = i * geom.tileSize;
 					object.z = j * geom.tileSize;
 					//Take textures from sprite sheet from 0 to 3 in horizontal and vertical
-					object.setTexture(sprites.getByIndex(int(Math.random() * 3), int(Math.random() * 3)));
+					object.setTexture(sprites.getByIndex(int(Math.random() * 3), 
+														 int(Math.random() * 3)));
 						
 					world.addObject(0, object);
 				}

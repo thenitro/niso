@@ -1,5 +1,6 @@
 package {
 	import com.thenitro.ngine.display.DocumentClass;
+	import com.thenitro.niso.samples.LuftUsageSample;
 	import com.thenitro.niso.samples.ObjectsCreationSample;
 	
 	import flash.display.Sprite;
@@ -7,7 +8,8 @@ package {
 	public class NisoDefaultSamples extends DocumentClass {
 		
 		public function NisoDefaultSamples() {
-			super(ObjectsCreationSample);
+			//super(ObjectsCreationSample);
+			  super(LuftUsageSample);
 		};
 	};
 }
