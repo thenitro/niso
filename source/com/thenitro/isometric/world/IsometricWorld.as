@@ -23,7 +23,7 @@ package com.thenitro.isometric.world {
 			_canvas = new Sprite();
 			_canvas.addEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
 			
-			_layers     = new Dictionary();
+			_layers = new Dictionary();
 		};
 		
 		private function addedToStageEventHandler(pEvent:Event):void {

@@ -3,6 +3,7 @@ package com.thenitro.isometric.world.objects {
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
+	import starling.textures.TextureSmoothing;
 
 	public final class IsometricSprite extends IsometricDisplayObject {
 		private var _view:Sprite;
@@ -21,8 +22,9 @@ package com.thenitro.isometric.world.objects {
 			
 			var image:Image = new Image(pTexture);
 				
-				image.pivotX = image.width / 2;
-				image.pivotY = image.height / 2;
+				image.pivotX    = image.width / 2;
+				image.pivotY    = image.height / 2;
+				image.smoothing = TextureSmoothing.NONE;
 				
 			_view.addChild(image);
 		};

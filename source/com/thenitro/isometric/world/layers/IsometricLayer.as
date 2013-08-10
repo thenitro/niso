@@ -6,6 +6,9 @@ package com.thenitro.isometric.world.layers {
 	import com.thenitro.ngine.pool.IReusable;
 	import com.thenitro.ngine.pool.Pool;
 	
+	import flash.utils.Dictionary;
+	
+	import starling.display.DisplayObject;
 	import starling.display.QuadBatch;
 	import starling.display.Sprite;
 	
@@ -14,7 +17,7 @@ package com.thenitro.isometric.world.layers {
 		
 		private var _canvas:Sprite;
 		
-		private var _array:Array;
+		private var _objects:Dictionary;
 		private var _id:uint;
 		
 		private var _world:IsometricWorld;
@@ -24,8 +27,8 @@ package com.thenitro.isometric.world.layers {
 		private var _sortingType:uint;
 		
 		public function IsometricLayer() {
-			_canvas = new Sprite();
-			_array  = [];
+			_canvas  = new Sprite();
+			_objects = new Dictionary();
 		};
 		
 		public function get reflection():Class {
@@ -86,7 +89,7 @@ package com.thenitro.isometric.world.layers {
 		};
 		
 		public function add(pObject:IsometricDisplayObject):void {
-			_array.push(pObject);
+			_objects[pObject.view] = pObject;
 			
 			pObject.setLayer(this);
 			pObject.updateScreenPosition();
@@ -99,7 +102,7 @@ package com.thenitro.isometric.world.layers {
 		};
 		
 		public function remove(pObject:IsometricDisplayObject):void {
-			_array.splice(_array.indexOf(pObject), 1);
+			delete _objects[pObject.view];
 			
 			_canvas.removeChild(pObject.view);
 			
@@ -109,25 +112,17 @@ package com.thenitro.isometric.world.layers {
 		};
 		
 		public function sort():void {
-			_array.sortOn('depth', Array.NUMERIC);
-			
-			for (var i:uint = 0; i < _array.length; i++) {
-				var object:IsometricDisplayObject = _array[i] as IsometricDisplayObject;
-				
-				_canvas.setChildIndex(object.view, i);
-			}
+			_canvas.sortChildren(sortObjects);
 		};
 		
 		public function clean():void {
 			_canvas.removeChildren();
 			
-			for each (var object:IsometricDisplayObject in _array) {
+			for each (var object:IsometricDisplayObject in _objects) {
 				remove(object);
 				
 				_pool.put(object);
 			}
-			
-			_array.length = 0;
 		};
 		
 		public function poolPrepare():void {
@@ -140,7 +135,19 @@ package com.thenitro.isometric.world.layers {
 			_canvas.dispose();
 			_canvas = null;
 			
-			_array = null;
+			_objects = null;
+		};
+		
+		private function sortObjects(pA:DisplayObject, 
+									 pB:DisplayObject):int {
+			var a:IsometricDisplayObject = _objects[pA] as IsometricDisplayObject;
+			var b:IsometricDisplayObject = _objects[pB] as IsometricDisplayObject;
+			
+			if (a.depth < b.depth) {
+				return -1;
+			}
+			
+			return 1;
 		};
 	}
 }

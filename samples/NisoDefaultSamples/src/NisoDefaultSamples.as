@@ -6,13 +6,13 @@ package {
 	
 	import flash.display.Sprite;
 	
-	[SWF(frameRate="60")]
+	[SWF(frameRate="60", backgroundColor="#FFFFFF")]
 	public class NisoDefaultSamples extends DocumentClass {
 		
 		public function NisoDefaultSamples() {
-			super(ObjectsCreationSample, true);
+			//super(ObjectsCreationSample, true);
 			//super(LuftUsageSample, true);
-			//super(TiledEditorDemo, true);
+			  super(TiledEditorDemo, true);
 		};
 	};
 }

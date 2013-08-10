@@ -54,8 +54,8 @@ package com.thenitro.niso.samples {
 			var object:IsometricSprite;
 			
 			//Creating objects
-			for (i = 0; i < 10; i++) {
-				for (j = 0; j < 10; j++) {
+			for (i = 0; i < 50; i++) {
+				for (j = 0; j < 50; j++) {
 					object = new IsometricSprite();
 					
 					object.x = i * geom.tileSize;
@@ -78,8 +78,8 @@ package com.thenitro.niso.samples {
 			world.addLayer(layer2);
 			
 			//Create some mountains randomly
-			for (i = 0; i < 5; i++) {
-				for (j = 0; j < 5; j++) {
+			for (i = 0; i < 25; i++) {
+				for (j = 0; j < 25; j++) {
 					object = new IsometricSprite();
 					
 					object.x = i * geom.tileSize;
