@@ -12,6 +12,10 @@ package com.thenitro.isometric.world.objects {
 			super();
 		};
 		
+		override public function get reflection():Class {
+			return IsometricSprite;
+		};
+		
 		public function setTexture(pTexture:Texture):void {
 			if (!pTexture) {
 				throw new Error("IsometricSprite.setTexure: texture is null!");

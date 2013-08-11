@@ -5,6 +5,7 @@ package com.thenitro.isometric.tiled {
 	import com.thenitro.isometric.world.layers.IsometricLayerSortingType;
 	import com.thenitro.isometric.world.objects.IsometricBehavior;
 	import com.thenitro.isometric.world.objects.IsometricSprite;
+	import com.thenitro.ngine.pool.Pool;
 	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -17,13 +18,15 @@ package com.thenitro.isometric.tiled {
 	import starling.textures.Texture;
 	
 	public final class TiledLoader extends EventDispatcher {
+		private static var _pool:Pool = Pool.getInstance();
+		
 		private var _url:String;
 		private var _world:IsometricWorld;
 		
 		private var _data:XML;
 
 		private var _loaders:Vector.<TilesetLoader>;
-		private var _tilesets:Vector.<TilesetLoader>;
+		private var _tilesets:Vector.<TilesetLoader>;		
 		
 		public function TiledLoader(pURL:String, pWorld:IsometricWorld) {
 			super();
@@ -75,7 +78,13 @@ package com.thenitro.isometric.tiled {
 			
 			for each (var tileAbstract:XML in pData..tile) {
 				if (tileAbstract.@gid != 0) {
-					var object:IsometricSprite = new IsometricSprite();
+					var object:IsometricSprite = _pool.get(IsometricSprite) as IsometricSprite;
+					
+					if (!object) {
+						object = new IsometricSprite();
+						_pool.allocate(IsometricSprite, 1);
+					}
+					
 						object.setTexture(getTexture(tileAbstract.@gid));
 						object.x = indexX * _world.geometry.tileSize;
 						object.z = indexZ * _world.geometry.tileSize;
@@ -101,14 +110,26 @@ package com.thenitro.isometric.tiled {
 			_world.addLayer(layer);
 			
 			for each (var objectAbstract:XML in pData..object) {				
-				var object:IsometricSprite = new IsometricSprite();
+				var object:IsometricSprite = _pool.get(IsometricSprite) as IsometricSprite;
+				
+				if (!object) {
+					object = new IsometricSprite();
+					_pool.allocate(IsometricSprite, 1);
+				}
+				
 					object.setTexture(getTexture(objectAbstract.@gid));
 					object.x = objectAbstract.@x - _world.geometry.tileSize;
 					object.z = objectAbstract.@y - _world.geometry.tileSize;
 					
 				if (String(objectAbstract.@type).length) {					
 					var currentClass:Class         = getDefinitionByName(objectAbstract.@type) as Class;
-					var instance:IsometricBehavior = new currentClass(); 
+					var instance:IsometricBehavior = _pool.get(currentClass) as IsometricBehavior; 
+					
+					if (!instance) {
+						instance = new currentClass();
+						_pool.allocate(currentClass, 1);
+					}
+					
 					
 					object.setBehavior(instance);
 				}
