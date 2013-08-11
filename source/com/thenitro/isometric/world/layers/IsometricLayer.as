@@ -9,7 +9,6 @@ package com.thenitro.isometric.world.layers {
 	import flash.utils.Dictionary;
 	
 	import starling.display.DisplayObject;
-	import starling.display.QuadBatch;
 	import starling.display.Sprite;
 	
 	public class IsometricLayer implements IReusable {
