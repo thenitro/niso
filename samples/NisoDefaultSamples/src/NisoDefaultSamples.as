@@ -1,10 +1,9 @@
 package {
-	import com.thenitro.ngine.display.DocumentClass;
 	import com.thenitro.niso.samples.LuftUsageSample;
 	import com.thenitro.niso.samples.ObjectsCreationSample;
 	import com.thenitro.niso.samples.TiledEditorDemo;
 	
-	import flash.display.Sprite;
+	import ngine.display.DocumentClass;
 	
 	[SWF(frameRate="60", backgroundColor="#FFFFFF")]
 	public class NisoDefaultSamples extends DocumentClass {

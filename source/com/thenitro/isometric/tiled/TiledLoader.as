@@ -5,13 +5,14 @@ package com.thenitro.isometric.tiled {
 	import com.thenitro.isometric.world.layers.IsometricLayerSortingType;
 	import com.thenitro.isometric.world.objects.IsometricBehavior;
 	import com.thenitro.isometric.world.objects.IsometricSprite;
-	import com.thenitro.ngine.pool.Pool;
 	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.getDefinitionByName;
+	
+	import npooling.Pool;
 	
 	import starling.events.Event;
 	import starling.events.EventDispatcher;

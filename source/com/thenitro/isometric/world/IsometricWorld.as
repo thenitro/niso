@@ -3,9 +3,10 @@ package com.thenitro.isometric.world {
 	import com.thenitro.isometric.world.layers.IsometricLayer;
 	import com.thenitro.isometric.world.layers.IsometricLayerSortingType;
 	import com.thenitro.isometric.world.objects.IsometricDisplayObject;
-	import com.thenitro.ngine.pool.Pool;
 	
 	import flash.utils.Dictionary;
+	
+	import npooling.Pool;
 	
 	import starling.display.Sprite;
 	import starling.events.Event;

@@ -1,7 +1,8 @@
 package com.thenitro.isometric.geom {
 	import com.thenitro.isometric.points.Point2D;
 	import com.thenitro.isometric.points.Point3D;
-	import com.thenitro.ngine.pool.Pool;
+	
+	import npooling.Pool;
 	
 	public final class IsometricGeometry {
 		public static const RATIO:Number = Math.sin(Math.PI / 6);

@@ -4,6 +4,7 @@
     <compilerSourcePath>
       <compilerSourcePathEntry kind="1" linkType="1" path="E:/ngine/source"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="E:/niso/source"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="E:/npooling/source"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">

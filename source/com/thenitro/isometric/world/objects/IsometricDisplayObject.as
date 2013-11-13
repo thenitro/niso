@@ -2,8 +2,9 @@ package com.thenitro.isometric.world.objects {
 	import com.thenitro.isometric.points.Point2D;
 	import com.thenitro.isometric.points.Point3D;
 	import com.thenitro.isometric.world.layers.IsometricLayer;
-	import com.thenitro.ngine.pool.IReusable;
-	import com.thenitro.ngine.pool.Pool;
+	
+	import npooling.IReusable;
+	import npooling.Pool;
 	
 	import starling.display.DisplayObject;
 	

@@ -4,9 +4,10 @@ package com.thenitro.niso.samples {
 	import com.thenitro.isometric.world.layers.IsometricLayer;
 	import com.thenitro.isometric.world.layers.IsometricLayerSortingType;
 	import com.thenitro.isometric.world.objects.IsometricSprite;
-	import com.thenitro.ngine.textures.SpriteSheetCutter;
 	
 	import flash.display.Bitmap;
+	
+	import ngine.sprites.SpriteSheetCutter;
 	
 	import starling.display.Sprite;
 	import starling.events.Event;

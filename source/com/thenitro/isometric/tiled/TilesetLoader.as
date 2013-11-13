@@ -1,6 +1,4 @@
 package com.thenitro.isometric.tiled {
-	import com.thenitro.ngine.textures.SpriteSheetCutter;
-	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Loader;
@@ -8,6 +6,8 @@ package com.thenitro.isometric.tiled {
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLRequest;
+	
+	import ngine.sprites.SpriteSheetCutter;
 	
 	import starling.events.Event;
 	import starling.events.EventDispatcher;

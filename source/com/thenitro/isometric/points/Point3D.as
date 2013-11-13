@@ -1,7 +1,7 @@
 package com.thenitro.isometric.points {
-	import com.thenitro.ngine.pool.IReusable;
-	import com.thenitro.ngine.pool.Pool;
-	
+	import npooling.IReusable;
+	import npooling.Pool;
+
 	public final class Point3D implements IReusable {
 		public var x:Number;
 		public var y:Number;
