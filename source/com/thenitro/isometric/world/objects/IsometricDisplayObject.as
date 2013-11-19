@@ -1,7 +1,8 @@
 package com.thenitro.isometric.world.objects {
-	import com.thenitro.isometric.points.Point2D;
-	import com.thenitro.isometric.points.Point3D;
 	import com.thenitro.isometric.world.layers.IsometricLayer;
+	
+	import ngine.math.vectors.TVector3D;
+	import ngine.math.vectors.Vector2D;
 	
 	import npooling.IReusable;
 	import npooling.Pool;
@@ -11,8 +12,8 @@ package com.thenitro.isometric.world.objects {
 	public class IsometricDisplayObject implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();
 		
-		private var _screenPosition:Point2D;
-		private var _isometricPosition:Point3D;
+		private var _screenPosition:Vector2D;
+		private var _isometricPosition:TVector3D;
 		
 		private var _id:uint;
 		
@@ -23,22 +24,14 @@ package com.thenitro.isometric.world.objects {
 		
 		private var _alpha:Number;
 		
+		private var _indexX:int;
+		private var _indexZ:int;
+		
 		public function IsometricDisplayObject() {
 			_alpha = 1.0;
 			
-			_screenPosition = _pool.get(Point2D) as Point2D;
-			
-			if (!_screenPosition) {
-				_screenPosition = new Point2D();
-				_pool.allocate(Point2D, 1);
-			}
-			
-			_isometricPosition = _pool.get(Point3D) as Point3D;
-			
-			if (!_isometricPosition) {
-				_isometricPosition = new Point3D();
-				_pool.allocate(Point3D, 1);
-			}
+			_screenPosition    = Vector2D.ZERO;
+			_isometricPosition = TVector3D.ZERO;
 			
 			_view = init();
 		};
@@ -83,6 +76,14 @@ package com.thenitro.isometric.world.objects {
 			return _isometricPosition.z;
 		};
 		
+		public function get indexX():int {
+			return _indexX;
+		};
+		
+		public function get indexZ():int {
+			return _indexZ;
+		};
+		
 		public function set alpha(pValue:Number):void {
 			_alpha = pValue;
 			
@@ -97,6 +98,10 @@ package com.thenitro.isometric.world.objects {
 		
 		public function get depth():Number {
 			return _screenPosition.depth;
+		};
+		
+		public function get isometricPosition():TVector3D {
+			return _isometricPosition;
 		};
 		
 		public function setLayer(pLayer:IsometricLayer):void {
@@ -119,6 +124,9 @@ package com.thenitro.isometric.world.objects {
 			_view.y = _screenPosition.y;
 			
 			_view.alpha = _alpha;
+			
+			_indexX = _isometricPosition.x / _layer.world.geometry.tileSize;
+			_indexZ = _isometricPosition.z / _layer.world.geometry.tileSize;
 		};
 		
 		public function poolPrepare():void {

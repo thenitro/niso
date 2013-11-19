@@ -1,10 +1,13 @@
 package com.thenitro.isometric.world.layers {
-	import com.thenitro.isometric.points.Point2D;
-	import com.thenitro.isometric.points.Point3D;
 	import com.thenitro.isometric.world.IsometricWorld;
 	import com.thenitro.isometric.world.objects.IsometricDisplayObject;
 	
 	import flash.utils.Dictionary;
+	
+	import ndatas.MatrixMxN;
+	
+	import ngine.math.vectors.TVector3D;
+	import ngine.math.vectors.Vector2D;
 	
 	import npooling.IReusable;
 	import npooling.Pool;
@@ -16,6 +19,8 @@ package com.thenitro.isometric.world.layers {
 		private static var _pool:Pool = Pool.getInstance();
 		
 		private var _canvas:Sprite;
+		
+		private var _matrix:MatrixMxN;
 		
 		private var _objects:Dictionary;
 		private var _id:uint;
@@ -29,6 +34,8 @@ package com.thenitro.isometric.world.layers {
 		public function IsometricLayer() {
 			_canvas  = new Sprite();
 			_objects = new Dictionary();
+			
+			_matrix = MatrixMxN.EMPTY;
 		};
 		
 		public function get reflection():Class {
@@ -51,6 +58,10 @@ package com.thenitro.isometric.world.layers {
 			return _sortingType;
 		};
 		
+		public function get objects():Dictionary {
+			return _objects;
+		};
+		
 		/**
 		 * 
 		 * @param pID          - id of layer, better use ordered layer id's
@@ -70,18 +81,13 @@ package com.thenitro.isometric.world.layers {
 			_world = pWorld;
 			
 			if (_useLuft) {
-				var offset3D:Point3D = _pool.get(Point3D) as Point3D;
-				
-				if (!offset3D) {
-					offset3D = new Point3D();
-					_pool.allocate(Point3D, 1);
-				}
+				var offset3D:TVector3D = TVector3D.ZERO;
 				
 				offset3D.x = _id * -_world.geometry.tileSize;
 				offset3D.y = 0;
 				offset3D.z = _id * -_world.geometry.tileSize;
 				
-				var offset:Point2D = _world.geometry.isometricToScreen(offset3D);
+				var offset:Vector2D = _world.geometry.isometricToScreen(offset3D);
 				
 				_canvas.x = offset.x;
 				_canvas.y = offset.y;
@@ -96,6 +102,9 @@ package com.thenitro.isometric.world.layers {
 			
 			_canvas.addChild(pObject.view);
 			
+			_matrix.add(pObject.x / _world.geometry.tileSize, 
+						pObject.z / _world.geometry.tileSize, pObject);
+			
 			if (_sortingType == IsometricLayerSortingType.ON_CHANGE) {
 				sort();
 			}
@@ -106,9 +115,16 @@ package com.thenitro.isometric.world.layers {
 			
 			_canvas.removeChild(pObject.view);
 			
+			_matrix.remove(pObject.x / _world.geometry.tileSize, 
+						   pObject.z / _world.geometry.tileSize);
+			
 			if (_sortingType == IsometricLayerSortingType.ON_CHANGE) {
 				sort();
 			}
+		};
+		
+		public function getObjectByIndex(pIndexX:int, pIndexY:int):IsometricDisplayObject {
+			return _matrix.take(pIndexX, pIndexY) as IsometricDisplayObject;
 		};
 		
 		public function sort():void {
@@ -123,6 +139,8 @@ package com.thenitro.isometric.world.layers {
 				
 				_pool.put(object);
 			}
+			
+			_matrix.clean();
 		};
 		
 		public function poolPrepare():void {
@@ -136,6 +154,8 @@ package com.thenitro.isometric.world.layers {
 			_canvas = null;
 			
 			_objects = null;
+			
+			_pool.put(_matrix);
 		};
 		
 		private function sortObjects(pA:DisplayObject, 

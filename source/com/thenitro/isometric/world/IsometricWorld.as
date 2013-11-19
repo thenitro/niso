@@ -61,6 +61,10 @@ package com.thenitro.isometric.world {
 			_canvas.y = centerY;
 		};
 		
+		public function getLayerByID(pID:int):IsometricLayer {
+			return _layers[pID] as IsometricLayer;
+		};
+		
 		public function addLayer(pLayer:IsometricLayer):void {
 			pLayer.setWorld(this);
 			

@@ -5,7 +5,7 @@ package {
 	
 	import ngine.display.DocumentClass;
 	
-	[SWF(frameRate="60", backgroundColor="#FFFFFF")]
+	[SWF(frameRate="60", backgroundColor="#FFFFFF", width="1024", height="768")]
 	public class NisoDefaultSamples extends DocumentClass {
 		
 		public function NisoDefaultSamples() {

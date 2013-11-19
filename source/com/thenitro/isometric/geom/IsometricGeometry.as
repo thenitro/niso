@@ -1,13 +1,11 @@
 package com.thenitro.isometric.geom {
-	import com.thenitro.isometric.points.Point2D;
-	import com.thenitro.isometric.points.Point3D;
+	import ngine.math.vectors.TVector3D;
+	import ngine.math.vectors.Vector2D;
 	
 	import npooling.Pool;
 	
 	public final class IsometricGeometry {
 		public static const RATIO:Number = Math.sin(Math.PI / 6);
-		
-		private static var _pool:Pool = Pool.getInstance();
 		
 		private var _tileSize:Number;
 		
@@ -23,16 +21,9 @@ package com.thenitro.isometric.geom {
 			_tileSize = pTileSize;
 		};
 		
-		public function isometricToScreen(pPosition:Point3D, 
-										  pOutput:Point2D = null):Point2D {
-			if (!pOutput) {
-				pOutput = _pool.get(Point2D) as Point2D;
-				
-				if (!pOutput) {
-					pOutput = new Point2D();
-					_pool.allocate(Point2D, 1);
-				}	
-			}
+		public function isometricToScreen(pPosition:TVector3D, 
+										  pOutput:Vector2D = null):Vector2D {
+			pOutput = pOutput ? pOutput : Vector2D.ZERO;
 			
 			pOutput.x =  pPosition.x - pPosition.z;
 			pOutput.y = (pPosition.x + pPosition.z) * RATIO;
@@ -42,15 +33,9 @@ package com.thenitro.isometric.geom {
 			return pOutput;
 		};
 		
-		public function screenToIsometric(pPosition:Point2D, pOutput:Point3D = null):Point3D {
-			if (!pOutput) {
-				pOutput = _pool.get(Point3D) as Point3D;
-				
-				if (!pOutput) {
-					pOutput = new Point3D();
-					_pool.allocate(Point3D, 1);
-				}
-			}
+		public function screenToIsometric(pPosition:Vector2D, 
+										  pOutput:TVector3D = null):TVector3D {
+			pOutput = pOutput ? pOutput : TVector3D.ZERO;
 			
 			pOutput.x =  pPosition.x * RATIO + pPosition.y;
 			pOutput.y =  0.0;
@@ -59,8 +44,8 @@ package com.thenitro.isometric.geom {
 			return pOutput;
 		};
 		
-		public function distance(pCurrentPoint:Point3D, 
-								 pDestinationPoint:Point3D):Number {
+		public function distance(pCurrentPoint:TVector3D, 
+								 pDestinationPoint:TVector3D):Number {
 			if (!pCurrentPoint || !pDestinationPoint) {
 				return 0;
 			}
