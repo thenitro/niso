@@ -1,16 +1,14 @@
-package com.thenitro.isometric.geom {
-	import ngine.math.vectors.TVector3D;
-	import ngine.math.vectors.Vector2D;
-	
-	import npooling.Pool;
-	
-	public final class IsometricGeometry {
-		public static const RATIO:Number = Math.sin(Math.PI / 6);
-		
+package niso.geom {
+    import nmath.vectors.TVector3D;
+    import nmath.vectors.Vector2D;
+
+    public final class IsometricGeometry {
 		private var _tileSize:Number;
+        private var _angle:Number;
 		
 		public function IsometricGeometry() {
 			_tileSize = 0;
+            _angle    = Math.sin(Math.PI / 6);
 		};
 		
 		public function get tileSize():Number {
@@ -20,13 +18,17 @@ package com.thenitro.isometric.geom {
 		public function setTileSize(pTileSize:Number):void {
 			_tileSize = pTileSize;
 		};
-		
-		public function isometricToScreen(pPosition:TVector3D, 
+
+        public function setAngle(pAngle:Number):void {
+            _angle = Math.sin(pAngle);
+        };
+
+		public function isometricToScreen(pPosition:TVector3D,
 										  pOutput:Vector2D = null):Vector2D {
 			pOutput = pOutput ? pOutput : Vector2D.ZERO;
 			
 			pOutput.x =  pPosition.x - pPosition.z;
-			pOutput.y = (pPosition.x + pPosition.z) * RATIO;
+			pOutput.y = (pPosition.x + pPosition.z) * _angle;
 			
 			pOutput.depth = (pPosition.x + pPosition.z) * 0.866 - pPosition.y * 0.707;
 			
@@ -37,9 +39,9 @@ package com.thenitro.isometric.geom {
 										  pOutput:TVector3D = null):TVector3D {
 			pOutput = pOutput ? pOutput : TVector3D.ZERO;
 			
-			pOutput.x =  pPosition.x * RATIO + pPosition.y;
+			pOutput.x =  pPosition.x * _angle + pPosition.y;
 			pOutput.y =  0.0;
-			pOutput.z = -pPosition.x * RATIO + pPosition.y;
+			pOutput.z = -pPosition.x * _angle + pPosition.y;
 			
 			return pOutput;
 		};

@@ -1,10 +1,10 @@
-package com.thenitro.isometric.tiled {
-	import com.thenitro.isometric.geom.IsometricGeometry;
-	import com.thenitro.isometric.world.IsometricWorld;
-	import com.thenitro.isometric.world.layers.IsometricLayer;
-	import com.thenitro.isometric.world.layers.IsometricLayerSortingType;
-	import com.thenitro.isometric.world.objects.IsometricBehavior;
-	import com.thenitro.isometric.world.objects.IsometricSprite;
+package niso.tiled {
+	import niso.geom.IsometricGeometry;
+	import niso.world.IsometricWorld;
+	import niso.world.layers.IsometricLayer;
+	import niso.world.layers.IsometricLayerSortingType;
+	import niso.world.objects.IsometricBehavior;
+	import niso.world.objects.IsometricSprite;
 	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -19,9 +19,13 @@ package com.thenitro.isometric.tiled {
 	import starling.textures.Texture;
 	
 	public final class TiledLoader extends EventDispatcher {
+        public static const LOADING_COMPLETED:String = 'loading_completed';
+
 		private static var _pool:Pool = Pool.getInstance();
 		
 		private var _url:String;
+        private var _loaded:Boolean;
+
 		private var _world:IsometricWorld;
 		
 		private var _data:XML;
@@ -29,11 +33,11 @@ package com.thenitro.isometric.tiled {
 		private var _loaders:Vector.<TilesetLoader>;
 		private var _tilesets:Vector.<TilesetLoader>;		
 		
-		public function TiledLoader(pURL:String, pWorld:IsometricWorld) {
+		public function TiledLoader(pURL:String) {
 			super();
 			
-			_url   = pURL;
-			_world = pWorld;
+			_url    = pURL;
+            _loaded = false;
 			
 			_loaders  = new Vector.<TilesetLoader>();
 			_tilesets = new Vector.<TilesetLoader>();
@@ -50,7 +54,13 @@ package com.thenitro.isometric.tiled {
 				loader.load(new URLRequest(_url));
 		};
 		
-		private function buildLevel():void {
+		public function buildLevel(pWorld:IsometricWorld):void {
+            _world = pWorld;
+
+            if (!_loaded) {
+                return;
+            }
+
 			var layerID:uint = 0;
 			
 			for each (var child:XML in _data.children()) {
@@ -170,11 +180,6 @@ package com.thenitro.isometric.tiled {
 			
 			_data = new XML(target.data);
 			
-			var geometry:IsometricGeometry = new IsometricGeometry();
-				geometry.setTileSize(_data.@tileheight);
-				
-			_world.setGeometry(geometry);
-			
 			for each (var abstract:XML in _data..tileset) {
 				loader = new TilesetLoader(abstract.@firstgid, 
 										   abstract.@tilewidth, 
@@ -203,10 +208,9 @@ package com.thenitro.isometric.tiled {
 			
 			if (!_loaders.length) {
 				_tilesets.sort(sortTilesetLoaders);
+                _loaded = true;
 				
-				buildLevel();
-				
-				dispatchEventWith(starling.events.Event.COMPLETE);
+				dispatchEventWith(LOADING_COMPLETED);
 			}
 		};
 	};

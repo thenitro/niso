@@ -1,8 +1,8 @@
-package com.thenitro.isometric.world {
-	import com.thenitro.isometric.geom.IsometricGeometry;
-	import com.thenitro.isometric.world.layers.IsometricLayer;
-	import com.thenitro.isometric.world.layers.IsometricLayerSortingType;
-	import com.thenitro.isometric.world.objects.IsometricDisplayObject;
+package niso.world {
+	import niso.geom.IsometricGeometry;
+	import niso.world.layers.IsometricLayer;
+	import niso.world.layers.IsometricLayerSortingType;
+	import niso.world.objects.IsometricDisplayObject;
 	
 	import flash.utils.Dictionary;
 	
@@ -25,6 +25,8 @@ package com.thenitro.isometric.world {
 			_canvas.addEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
 			
 			_layers = new Dictionary();
+
+            _geometry = new IsometricGeometry();
 		};
 		
 		private function addedToStageEventHandler(pEvent:Event):void {
@@ -47,10 +49,6 @@ package com.thenitro.isometric.world {
 		
 		public function get canvas():Sprite {
 			return _canvas;
-		};
-		
-		public function setGeometry(pGeometry:IsometricGeometry):void {
-			_geometry = pGeometry;
 		};
 		
 		public function relocate():void {

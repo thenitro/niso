@@ -1,17 +1,20 @@
-package com.thenitro.isometric.world.objects {
-	import com.thenitro.isometric.world.layers.IsometricLayer;
-	
-	import ngine.math.vectors.TVector3D;
-	import ngine.math.vectors.Vector2D;
-	
-	import npooling.IReusable;
-	import npooling.Pool;
-	
-	import starling.display.DisplayObject;
-	
-	public class IsometricDisplayObject implements IReusable {
+package niso.world.objects {
+    import niso.world.layers.IsometricLayer;
+
+    import nmath.vectors.TVector3D;
+
+    import nmath.vectors.Vector2D;
+
+    import npooling.IReusable;
+    import npooling.Pool;
+
+    import starling.display.DisplayObject;
+
+    public class IsometricDisplayObject implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();
-		
+
+        private var _disposed:Boolean;
+
 		private var _screenPosition:Vector2D;
 		private var _isometricPosition:TVector3D;
 		
@@ -39,6 +42,10 @@ package com.thenitro.isometric.world.objects {
 		public function get reflection():Class {
 			return IsometricDisplayObject;
 		};
+
+        public function get disposed():Boolean {
+            return _disposed;
+        };
 		
 		public function get id():uint {
 			return _id;
@@ -144,6 +151,8 @@ package com.thenitro.isometric.world.objects {
 			
 			_view.dispose();
 			_view = null;
+
+            _disposed = true;
 		};
 		
 		protected function init():DisplayObject {

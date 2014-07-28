@@ -1,6 +1,6 @@
-package com.thenitro.isometric.world.objects.builtin {
-	import com.thenitro.isometric.world.objects.IsometricBehavior;
-	import com.thenitro.isometric.world.objects.IsometricDisplayObject;
+package niso.world.objects.builtin {
+	import niso.world.objects.IsometricBehavior;
+	import niso.world.objects.IsometricDisplayObject;
 	
 	import ngine.pathfinding.Pathfinder;
 	

@@ -1,4 +1,4 @@
-package com.thenitro.isometric.world.objects {
+package niso.world.objects {
 	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -19,7 +19,7 @@ package com.thenitro.isometric.world.objects {
 		public function setTexture(pTexture:Texture):void {
 			if (!pTexture) {
 				throw new Error("IsometricSprite.setTexure: texture is null!");
-				return null;
+				return;
 			}
 			
 			_view.removeChildren(0, -1, true);

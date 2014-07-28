@@ -1,23 +1,25 @@
-package com.thenitro.isometric.world.layers {
-	import com.thenitro.isometric.world.IsometricWorld;
-	import com.thenitro.isometric.world.objects.IsometricDisplayObject;
-	
-	import flash.utils.Dictionary;
-	
-	import ndatas.MatrixMxN;
-	
-	import ngine.math.vectors.TVector3D;
-	import ngine.math.vectors.Vector2D;
-	
-	import npooling.IReusable;
-	import npooling.Pool;
-	
-	import starling.display.DisplayObject;
-	import starling.display.Sprite;
-	
-	public class IsometricLayer implements IReusable {
+package niso.world.layers {
+    import flash.utils.Dictionary;
+
+    import ncollections.MatrixMxN;
+
+    import niso.world.IsometricWorld;
+    import niso.world.objects.IsometricDisplayObject;
+
+    import nmath.vectors.TVector3D;
+    import nmath.vectors.Vector2D;
+
+    import npooling.IReusable;
+    import npooling.Pool;
+
+    import starling.display.DisplayObject;
+    import starling.display.Sprite;
+
+    public class IsometricLayer implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();
-		
+
+        private var _disposed:Boolean;
+
 		private var _canvas:Sprite;
 		
 		private var _matrix:MatrixMxN;
@@ -41,6 +43,10 @@ package com.thenitro.isometric.world.layers {
 		public function get reflection():Class {
 			return IsometricLayer;
 		};
+
+        public function get disposed():Boolean {
+            return _disposed;
+        };
 		
 		public function get canvas():Sprite {
 			return _canvas;
@@ -83,9 +89,9 @@ package com.thenitro.isometric.world.layers {
 			if (_useLuft) {
 				var offset3D:TVector3D = TVector3D.ZERO;
 				
-				offset3D.x = _id * -_world.geometry.tileSize;
-				offset3D.y = 0;
-				offset3D.z = _id * -_world.geometry.tileSize;
+                    offset3D.x = _id * -_world.geometry.tileSize;
+                    offset3D.y = 0;
+                    offset3D.z = _id * -_world.geometry.tileSize;
 				
 				var offset:Vector2D = _world.geometry.isometricToScreen(offset3D);
 				
@@ -156,6 +162,8 @@ package com.thenitro.isometric.world.layers {
 			_objects = null;
 			
 			_pool.put(_matrix);
+
+            _disposed = true;
 		};
 		
 		private function sortObjects(pA:DisplayObject, 

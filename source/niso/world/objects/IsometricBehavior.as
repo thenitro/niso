@@ -1,4 +1,4 @@
-package com.thenitro.isometric.world.objects {
+package niso.world.objects {
 	import npooling.IReusable;
 	import npooling.Pool;
 	
@@ -6,7 +6,8 @@ package com.thenitro.isometric.world.objects {
 	
 	public class IsometricBehavior extends EventDispatcher implements IReusable {
 		protected static var _pool:Pool = Pool.getInstance();
-		
+
+        private var _disposed:Boolean;
 		private var _object:IsometricDisplayObject;
 		
 		public function IsometricBehavior() {
@@ -16,6 +17,10 @@ package com.thenitro.isometric.world.objects {
 		public function get reflection():Class {
 			return IsometricBehavior;
 		};
+
+        public function get disposed():Boolean {
+            return _disposed;
+        };
 		
 		public function get object():IsometricDisplayObject {
 			return _object;
@@ -31,6 +36,8 @@ package com.thenitro.isometric.world.objects {
 		
 		public function dispose():void {
 			removeEventListeners();
+
+            _disposed = true;
 		};
 	};
 }

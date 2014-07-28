@@ -1,4 +1,4 @@
-package com.thenitro.isometric.world.layers {
+package niso.world.layers {
 	
 	public class IsometricLayerSortingType {
 		public static const ON_DEMAND:uint = 0;

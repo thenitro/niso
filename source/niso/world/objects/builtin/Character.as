@@ -1,16 +1,11 @@
-package com.thenitro.isometric.world.objects.builtin {
-	import com.thenitro.isometric.world.objects.IsometricBehavior;
-	import com.thenitro.isometric.world.objects.IsometricDisplayObject;
-	
-	import ngine.math.vectors.TVector3D;
-	import ngine.pathfinding.AStar;
-	import ngine.pathfinding.Node;
-	import ngine.pathfinding.Pathfinder;
-	
-	import starling.animation.Tween;
-	import starling.core.Starling;
-	
-	public class Character extends IsometricBehavior {
+package niso.world.objects.builtin {
+    import niso.world.objects.IsometricBehavior;
+    import niso.world.objects.IsometricDisplayObject;
+
+    import starling.animation.Tween;
+    import starling.core.Starling;
+
+    public class Character extends IsometricBehavior {
 		public static const MOVE_COMPLETE:String = 'move_complete_event';
 		
 		public var moveHeuristric:Function = AStar.euclidian;
