@@ -16,7 +16,8 @@ package niso.world.objects {
 			return IsometricSprite;
 		};
 		
-		public function setTexture(pTexture:Texture):void {
+		public function setTexture(pTexture:Texture,
+                                   pPivotX:Number, pPivotY:Number):void {
 			if (!pTexture) {
 				throw new Error("IsometricSprite.setTexure: texture is null!");
 				return;
@@ -26,8 +27,9 @@ package niso.world.objects {
 			
 			var image:Image = new Image(pTexture);
 				
-				image.pivotX    = image.width / 2;
-				image.pivotY    = image.height / 2;
+				image.pivotX    = pPivotX;
+				image.pivotY    = pPivotY;
+
 				image.smoothing = TextureSmoothing.NONE;
 				
 			_view.addChild(image);
