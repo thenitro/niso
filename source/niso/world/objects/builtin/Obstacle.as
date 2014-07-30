@@ -1,10 +1,10 @@
 package niso.world.objects.builtin {
-	import niso.world.objects.IsometricBehavior;
-	import niso.world.objects.IsometricDisplayObject;
-	
-	import ngine.pathfinding.Pathfinder;
-	
-	public class Obstacle extends IsometricBehavior {
+    import niso.world.objects.IsometricBehavior;
+    import niso.world.objects.IsometricDisplayObject;
+
+    import npathfinding.base.Pathfinder;
+
+    public class Obstacle extends IsometricBehavior {
 		private static var _pathfinder:Pathfinder = Pathfinder.getInstance();
 		
 		public function Obstacle() {
@@ -17,8 +17,10 @@ package niso.world.objects.builtin {
 		
 		override public function setObject(pObject:IsometricDisplayObject):void {
 			super.setObject(pObject);
+
+            trace('Obstacle.setObject:', pObject.x, pObject.z);
 			
-			_pathfinder.setUnWalkable(pObject.indexX, pObject.indexZ);
+			_pathfinder.setUnWalkable(pObject.x, pObject.z);
 		};
 	};
 }

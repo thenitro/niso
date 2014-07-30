@@ -1,31 +1,23 @@
 package niso.tiled {
-	import niso.geom.IsometricGeometry;
-	import niso.world.IsometricWorld;
-	import niso.world.layers.IsometricLayer;
-	import niso.world.layers.IsometricLayerSortingType;
-	import niso.world.objects.IsometricBehavior;
-	import niso.world.objects.IsometricSprite;
-	
-	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
-	import flash.utils.getDefinitionByName;
+    import flash.events.Event;
+    import flash.events.IOErrorEvent;
+    import flash.net.URLLoader;
+    import flash.net.URLRequest;
 
-    import nmath.vectors.TVector3D;
+    import niso.world.IsometricWorld;
+    import niso.world.layers.IsometricLayer;
+    import niso.world.layers.IsometricLayerSortingType;
+    import niso.world.objects.IsometricSprite;
 
-    import nmath.vectors.Vector2D;
+    import starling.events.Event;
+    import starling.events.EventDispatcher;
+    import starling.textures.Texture;
 
-    import npooling.Pool;
-	
-	import starling.events.Event;
-	import starling.events.EventDispatcher;
-	import starling.textures.Texture;
-	
-	public final class TiledLoader extends EventDispatcher {
+    public final class TiledLoader extends EventDispatcher {
         public static const LOADING_COMPLETED:String = 'loading_completed';
 
-		private static var _pool:Pool = Pool.getInstance();
+        private var _sizeX:int;
+        private var _sizeZ:int;
 
         private var _tileWidth:Number;
         private var _tileHeight:Number;
@@ -55,7 +47,15 @@ package niso.tiled {
         public function get world():IsometricWorld {
             return _world;
         };
-		
+
+        public function get sizeX():int {
+            return _sizeX
+        };
+
+        public function get sizeZ():int {
+            return _sizeZ;
+        };
+
 		public function load():void {
 			_loaders.length = 0;
 			
@@ -69,10 +69,14 @@ package niso.tiled {
 		
 		public function buildLevel(pWorld:IsometricWorld, pFactory:TiledFactory):void {
             _world   = pWorld;
+
             _factory = pFactory;
+            _factory.initMap(_data.@width, _data.@height);
 
             _tileWidth  = _data.@tilewidth;
             _tileHeight = _data.@tileheight;
+
+            _world.geometry.setTileSize(_tileWidth, _tileHeight);
 
             if (!_loaded) {
                 return;
@@ -120,10 +124,10 @@ package niso.tiled {
 				if (tileAbstract.@gid != 0) {
                     var texture:Texture = getTexture(tileAbstract.@gid);
 
-                    var tile:IsometricSprite = _factory.createTile(tileAbstract, this);
+                    var tile:IsometricSprite = _factory.createTile(tileAbstract);
 
-                        tile.x = indexX * _world.geometry.tileSize;
-                        tile.z = indexZ * _world.geometry.tileSize;
+                        tile.x = indexX;
+                        tile.z = indexZ;
 
                         tile.setTexture(texture, texture.width / 2, texture.height / 2);
 
@@ -139,24 +143,29 @@ package niso.tiled {
 			}
 			
 			layer.sort();
-		};
+        };
 		
 		private function parseObjectGroup(pData:XML, pLayerID:uint):void {
 			var layer:IsometricLayer = new IsometricLayer();
 				layer.init(pLayerID, false, IsometricLayerSortingType.ALWAYS);
 			
 			_world.addLayer(layer);
-			
-			for each (var objectAbstract:XML in pData..object) {				
+
+            for each (var objectAbstract:XML in pData..object) {
+                var halfWidth:int  = Math.ceil(Math.round(objectAbstract.@width  / _tileHeight) / 2) - 1;
+                var halfHeight:int = Math.ceil(Math.round(objectAbstract.@height / _tileHeight) / 2) - 1;
+
+                var indexX:int = Math.round(objectAbstract.@x / _tileHeight) + halfWidth;
+                var indexZ:int = Math.round(objectAbstract.@y / _tileHeight) + halfHeight;
+
                 var object:IsometricSprite = _factory.createObject(objectAbstract);
 
-                var indexX:int = Math.round(objectAbstract.@x / _tileHeight);
-                var indexZ:int = Math.round(objectAbstract.@y / _tileHeight);
-
-                object.x = indexX * _world.geometry.tileSize;
-                object.z = indexZ * _world.geometry.tileSize;
+                    object.x = indexX;
+                    object.z = indexZ;
 
 				_world.addObject(pLayerID, object);
+
+                _factory.createBehaviour(objectAbstract, object);
 			}
 		};
 		

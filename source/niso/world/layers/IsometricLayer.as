@@ -89,9 +89,9 @@ package niso.world.layers {
 			if (_useLuft) {
 				var offset3D:TVector3D = TVector3D.ZERO;
 				
-                    offset3D.x = _id * -_world.geometry.tileSize;
-                    offset3D.y = 0;
-                    offset3D.z = _id * -_world.geometry.tileSize;
+                    offset3D.x -= 1;
+                    offset3D.y  = 0;
+                    offset3D.z -= 1;
 				
 				var offset:Vector2D = _world.geometry.isometricToScreen(offset3D);
 				
@@ -108,8 +108,7 @@ package niso.world.layers {
 			
 			_canvas.addChild(pObject.view);
 			
-			_matrix.add(pObject.x / _world.geometry.tileSize, 
-						pObject.z / _world.geometry.tileSize, pObject);
+			_matrix.add(pObject.x, pObject.z, pObject);
 			
 			if (_sortingType == IsometricLayerSortingType.ON_CHANGE) {
 				sort();
@@ -120,9 +119,8 @@ package niso.world.layers {
 			delete _objects[pObject.view];
 			
 			_canvas.removeChild(pObject.view);
-			
-			_matrix.remove(pObject.x / _world.geometry.tileSize, 
-						   pObject.z / _world.geometry.tileSize);
+
+			_matrix.remove(pObject.x, pObject.z);
 			
 			if (_sortingType == IsometricLayerSortingType.ON_CHANGE) {
 				sort();

@@ -2,13 +2,20 @@ package niso.world.objects.builtin {
     import niso.world.objects.IsometricBehavior;
     import niso.world.objects.IsometricDisplayObject;
 
+    import nmath.vectors.TVector3D;
+    import nmath.vectors.Vector2D;
+
+    import npathfinding.base.Heuristic;
+    import npathfinding.base.Node;
+    import npathfinding.base.Pathfinder;
+
     import starling.animation.Tween;
     import starling.core.Starling;
 
     public class Character extends IsometricBehavior {
 		public static const MOVE_COMPLETE:String = 'move_complete_event';
 		
-		public var moveHeuristric:Function = AStar.euclidian;
+		public var moveHeuristric:Function = Heuristic.euclidean;
 		
 		public var moveSpeed:Number = 1;
 		
@@ -37,33 +44,40 @@ package niso.world.objects.builtin {
 		};
 		
 		public function moveTo(pDestinationX:int, pDestinationZ:int):void {
+            trace('Character.moveTo:', pDestinationX, pDestinationZ);
+
 			if (_moving) {
 				return;
 			}
 			
-			if (object.indexX == pDestinationX && 
-				object.indexZ == pDestinationZ) {
+			if (object.x == pDestinationX &&
+				object.z == pDestinationZ) {
 				dispatchEventWith(MOVE_COMPLETE, false, object);
 				return;
 			}
 			
-			var route:Vector.<Node> = _pathfinder.findPath(object.indexX, 
-														   object.indexZ,
+			var route:Vector.<Node> = _pathfinder.findPath(object.x,
+														   object.z,
 														   pDestinationX,
 														   pDestinationZ,
 														   moveHeuristric);
 			
-			if (route.length == 0) {
+			if (!route || route.length == 0) {
 				dispatchEventWith(MOVE_COMPLETE, false, object);
 				return;
 			}
 			
 			_destinationX = pDestinationX;
 			_destinationZ = pDestinationZ;
-			
+
+            trace('Character.moveTo:', route);
+
 			_route = _pathfinder.reducePath(route);
 			 route = null;
-			
+
+
+            trace('Character.moveTo:', _route);
+
 			startMoving();
 		};
 		
@@ -77,12 +91,15 @@ package niso.world.objects.builtin {
 			var node:Node = _route.shift();
 			
 			if (node) {
+                trace('Character.nextPoint:', node.indexX, node.indexY);
+
 				var destination:TVector3D = TVector3D.ZERO;
-					destination.x = _destinationX * object.layer.world.geometry.tileSize;
-					destination.z = _destinationZ * object.layer.world.geometry.tileSize;
-					
+
+					destination.x = node.indexX;
+					destination.z = node.indexY;
+
 				var distance:Number = object.isometricPosition.distanceTo(destination);
-				
+
 				var tween:Tween = new Tween(object, distance * moveSpeed);
 				
 					tween.animate('x', destination.x);
@@ -92,7 +109,7 @@ package niso.world.objects.builtin {
 					tween.onUpdate   = object.updateScreenPosition;
 					
 				Starling.juggler.add(tween);
-				
+
 				_pool.put(destination);
 			} else {
 				_moving = false;

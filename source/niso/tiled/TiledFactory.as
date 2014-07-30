@@ -13,8 +13,11 @@ package niso.tiled {
 
         };
 
-        public function createTile(pTileAbstract:Object,
-                                   pLoader:TiledLoader):IsometricSprite {
+        public function initMap(pSizeX:int, pSizeY:int):void {
+
+        };
+
+        public function createTile(pTileAbstract:Object):IsometricSprite {
             var object:IsometricSprite = _pool.get(IsometricSprite) as IsometricSprite;
 
             if (!object) {
@@ -33,19 +36,26 @@ package niso.tiled {
                 _pool.allocate(IsometricSprite, 1);
             }
 
-            if (String(pObjectAbstract.@type).length) {
-                var currentClass:Class         = getDefinitionByName(pObjectAbstract.@type) as Class;
-                var instance:IsometricBehavior = _pool.get(currentClass) as IsometricBehavior;
+            return object;
+        };
 
-                if (!instance) {
-                    instance = new currentClass();
-                    _pool.allocate(currentClass, 1);
-                }
-
-                object.setBehavior(instance);
+        public function createBehaviour(pObjectAbstract:XML,
+                                        pObject:IsometricSprite):IsometricBehavior {
+            if (!String(pObjectAbstract.@type).length) {
+                return null;
             }
 
-            return object;
+            var currentClass:Class         = getDefinitionByName(pObjectAbstract.@type) as Class;
+            var instance:IsometricBehavior = _pool.get(currentClass) as IsometricBehavior;
+
+            if (!instance) {
+                instance = new currentClass();
+                _pool.allocate(currentClass, 1);
+            }
+
+            pObject.setBehavior(instance);
+
+            return instance;
         };
     };
 }

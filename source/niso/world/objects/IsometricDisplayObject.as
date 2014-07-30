@@ -1,4 +1,6 @@
 package niso.world.objects {
+    import feathers.controls.Label;
+
     import niso.world.layers.IsometricLayer;
 
     import nmath.vectors.TVector3D;
@@ -9,6 +11,7 @@ package niso.world.objects {
     import npooling.Pool;
 
     import starling.display.DisplayObject;
+    import starling.display.Sprite;
 
     public class IsometricDisplayObject implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();
@@ -26,10 +29,7 @@ package niso.world.objects {
 		private var _behavior:IsometricBehavior;
 		
 		private var _alpha:Number;
-		
-		private var _indexX:int;
-		private var _indexZ:int;
-		
+
 		public function IsometricDisplayObject() {
 			_alpha = 1.0;
 			
@@ -83,14 +83,6 @@ package niso.world.objects {
 			return _isometricPosition.z;
 		};
 		
-		public function get indexX():int {
-			return _indexX;
-		};
-		
-		public function get indexZ():int {
-			return _indexZ;
-		};
-		
 		public function set alpha(pValue:Number):void {
 			_alpha = pValue;
 			
@@ -131,9 +123,6 @@ package niso.world.objects {
 			_view.y = _screenPosition.y;
 			
 			_view.alpha = _alpha;
-			
-			_indexX = _isometricPosition.x / _layer.world.geometry.tileSize;
-			_indexZ = _isometricPosition.z / _layer.world.geometry.tileSize;
 		};
 		
 		public function poolPrepare():void {
