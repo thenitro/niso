@@ -3,7 +3,6 @@ package niso.world.objects.builtin {
     import niso.world.objects.IsometricDisplayObject;
 
     import nmath.vectors.TVector3D;
-    import nmath.vectors.Vector2D;
 
     import npathfinding.base.Heuristic;
     import npathfinding.base.Node;
@@ -44,8 +43,6 @@ package niso.world.objects.builtin {
 		};
 		
 		public function moveTo(pDestinationX:int, pDestinationZ:int):void {
-            trace('Character.moveTo:', pDestinationX, pDestinationZ);
-
 			if (_moving) {
 				return;
 			}
@@ -81,8 +78,6 @@ package niso.world.objects.builtin {
 			var node:Node = _route.shift();
 			
 			if (node) {
-                trace('Character.nextPoint:', node.indexX, node.indexY);
-
 				var destination:TVector3D = TVector3D.ZERO;
 
 					destination.x = node.indexX;
