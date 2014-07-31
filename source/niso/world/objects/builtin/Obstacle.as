@@ -18,8 +18,6 @@ package niso.world.objects.builtin {
 		override public function setObject(pObject:IsometricDisplayObject):void {
 			super.setObject(pObject);
 
-            trace('Obstacle.setObject:', pObject.x, pObject.z);
-			
 			_pathfinder.setUnWalkable(pObject.x, pObject.z);
 		};
 	};
