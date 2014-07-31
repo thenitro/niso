@@ -55,28 +55,18 @@ package niso.world.objects.builtin {
 				dispatchEventWith(MOVE_COMPLETE, false, object);
 				return;
 			}
+
+            _route = _pathfinder.findPath(object.x, object.z,
+                                          pDestinationX, pDestinationZ,
+                                          moveHeuristric);
 			
-			var route:Vector.<Node> = _pathfinder.findPath(object.x,
-														   object.z,
-														   pDestinationX,
-														   pDestinationZ,
-														   moveHeuristric);
-			
-			if (!route || route.length == 0) {
+			if (!_route || _route.length == 0) {
 				dispatchEventWith(MOVE_COMPLETE, false, object);
 				return;
 			}
 			
 			_destinationX = pDestinationX;
 			_destinationZ = pDestinationZ;
-
-            trace('Character.moveTo:', route);
-
-			_route = _pathfinder.reducePath(route);
-			 route = null;
-
-
-            trace('Character.moveTo:', _route);
 
 			startMoving();
 		};
