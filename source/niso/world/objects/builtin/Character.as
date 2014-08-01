@@ -85,7 +85,7 @@ package niso.world.objects.builtin {
 
 				var distance:Number = object.isometricPosition.distanceTo(destination);
 
-				var tween:Tween = new Tween(object, distance * moveSpeed);
+				var tween:Tween = new Tween(object, distance / moveSpeed);
 				
 					tween.animate('x', destination.x);
 					tween.animate('z', destination.z);

@@ -1,6 +1,8 @@
 package niso.tiled {
     import flash.utils.getDefinitionByName;
 
+    import niso.world.IsometricWorld;
+
     import niso.world.objects.IsometricBehavior;
     import niso.world.objects.IsometricSprite;
 
@@ -9,8 +11,14 @@ package niso.tiled {
     public class TiledFactory {
         protected static var _pool:Pool = Pool.getInstance();
 
+        protected var _world:IsometricWorld;
+
         public function TiledFactory() {
 
+        };
+
+        public function setWorld(pWorld:IsometricWorld):void {
+            _world = pWorld;
         };
 
         public function initMap(pSizeX:int, pSizeY:int):void {

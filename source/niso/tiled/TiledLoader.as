@@ -71,6 +71,7 @@ package niso.tiled {
             _world   = pWorld;
 
             _factory = pFactory;
+            _factory.setWorld(_world);
             _factory.initMap(_data.@width, _data.@height);
 
             _tileWidth  = _data.@tilewidth;
