@@ -79,12 +79,20 @@ package niso.world {
 		
 		public function addObject(pLayerID:uint, 
 								  pObject:IsometricDisplayObject):void {
+            if (!pObject) {
+                return;
+            }
+
 			var layer:IsometricLayer = _layers[pLayerID] as IsometricLayer;
 				layer.add(pObject);
 		};
 		
 		public function removeObject(pLayerID:uint,
 									 pObject:IsometricDisplayObject):void {
+            if (!pObject) {
+                return;
+            }
+
 			var layer:IsometricLayer = _layers[pLayerID] as IsometricLayer;
 				layer.remove(pObject);
 		};

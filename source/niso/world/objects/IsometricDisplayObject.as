@@ -1,17 +1,13 @@
 package niso.world.objects {
-    import feathers.controls.Label;
-
     import niso.world.layers.IsometricLayer;
 
     import nmath.vectors.TVector3D;
-
     import nmath.vectors.Vector2D;
 
     import npooling.IReusable;
     import npooling.Pool;
 
     import starling.display.DisplayObject;
-    import starling.display.Sprite;
 
     public class IsometricDisplayObject implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();
@@ -102,6 +98,10 @@ package niso.world.objects {
 		public function get isometricPosition():TVector3D {
 			return _isometricPosition;
 		};
+
+        public function get screenPosition():Vector2D {
+            return _screenPosition;
+        };
 		
 		public function setLayer(pLayer:IsometricLayer):void {
 			_layer = pLayer;

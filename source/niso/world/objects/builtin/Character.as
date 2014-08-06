@@ -1,8 +1,15 @@
 package niso.world.objects.builtin {
+    import flash.utils.Dictionary;
+
+    import niso.geom.Direction;
+
+    import niso.geom.Directions;
     import niso.world.objects.IsometricBehavior;
     import niso.world.objects.IsometricDisplayObject;
+    import niso.world.objects.IsometricMovieClip;
 
     import nmath.vectors.TVector3D;
+    import nmath.vectors.Vector2D;
 
     import npathfinding.base.Heuristic;
     import npathfinding.base.Node;
@@ -13,11 +20,11 @@ package niso.world.objects.builtin {
 
     public class Character extends IsometricBehavior {
 		public static const MOVE_COMPLETE:String = 'move_complete_event';
-		
+
 		public var moveHeuristric:Function = Heuristic.euclidean;
-		
 		public var moveSpeed:Number = 1;
-		
+
+        private static var _directions:Directions = Directions.getInstance();
 		private static var _pathfinder:Pathfinder = Pathfinder.getInstance();
 		
 		private var _moving:Boolean;
@@ -56,6 +63,7 @@ package niso.world.objects.builtin {
             _route = _pathfinder.findPath(object.x, object.z,
                                           pDestinationX, pDestinationZ,
                                           moveHeuristric);
+            _route.shift();
 			
 			if (!_route || _route.length == 0) {
 				dispatchEventWith(MOVE_COMPLETE, false, object);
@@ -85,6 +93,10 @@ package niso.world.objects.builtin {
 
 				var distance:Number = object.isometricPosition.distanceTo(destination);
 
+                var direction:Direction = _directions.getDirection(object.isometricPosition, destination);
+
+                (object as IsometricMovieClip).setTextures(direction.id + '_walk', direction.flip);
+
 				var tween:Tween = new Tween(object, distance / moveSpeed);
 				
 					tween.animate('x', destination.x);
@@ -99,9 +111,13 @@ package niso.world.objects.builtin {
 			} else {
 				_moving = false;
 				_route  = null;
+
+                (object as IsometricMovieClip).setTextures('idle');
 				
 				dispatchEventWith(MOVE_COMPLETE, false, object);
 			}
 		};
+
+
 	};
 }

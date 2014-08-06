@@ -41,11 +41,15 @@ package niso.geom {
 		};
 		
 		public function screenToIsometric(pPosition:Vector2D, 
-										  pOutput:TVector3D = null):TVector3D {
+										  pOutput:TVector3D = null, pRoundCoords:Boolean = true):TVector3D {
 			pOutput = pOutput ? pOutput : TVector3D.ZERO;
 
-            pOutput.x = Math.round((pPosition.x / _tileWidthHalf  +  pPosition.y / _tileHeightHalf) / 2);
-            pOutput.z = Math.round((pPosition.y / _tileHeightHalf - (pPosition.x / _tileWidthHalf)) / 2);
+            pOutput.x = (pPosition.x / _tileWidthHalf  +  pPosition.y / _tileHeightHalf) / 2;
+            pOutput.z = (pPosition.y / _tileHeightHalf - (pPosition.x / _tileWidthHalf)) / 2;
+
+            if (pRoundCoords) {
+                pOutput.round();
+            }
 
 			return pOutput;
 		};

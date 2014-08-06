@@ -12,6 +12,7 @@ package niso.files {
 
     import starling.events.EventDispatcher;
     import starling.textures.Texture;
+    import starling.textures.TextureAtlas;
 
     public class NIOFormat extends EventDispatcher implements IReusable {
         public static const PARSING_COMPLETED:String = 'parsing_completed';
@@ -22,6 +23,11 @@ package niso.files {
         private var _offsetY:Number;
 
         private var _texture:Texture;
+
+        private var _isAtlas:Boolean;
+        private var _atlas:TextureAtlas;
+
+        private var _description:XML;
 
         private var _file:TFile;
 
@@ -45,8 +51,16 @@ package niso.files {
             return _offsetY;
         };
 
+        public function isAtlas():Boolean {
+            return _isAtlas;
+        };
+
         public function get texture():Texture {
             return _texture;
+        };
+
+        public function get atlas():TextureAtlas {
+            return _atlas;
         };
 
         public function load(pFile:TFile):void {
@@ -63,6 +77,12 @@ package niso.files {
                 ba.writeBytes(content, content.position, size);
 
             content.position += size;
+
+            _isAtlas = content.readBoolean();
+
+            if (_isAtlas) {
+                _description = new XML(content.readUTF());
+            }
 
             var loader:Loader = new Loader();
                 loader.contentLoaderInfo.addEventListener(Event.COMPLETE,
@@ -85,7 +105,11 @@ package niso.files {
                 loaderInfo.removeEventListener(Event.COMPLETE,
                                                loaderCompletedEventHandler);
 
-            _texture = Texture.fromBitmap(loaderInfo.content as Bitmap);
+            _texture = Texture.fromBitmap(loaderInfo.content as Bitmap, false);
+
+            if (_isAtlas) {
+                _atlas = new TextureAtlas(_texture, _description);
+            }
 
             _file.setContent(this, loaderInfo.bytesLoaded);
 
