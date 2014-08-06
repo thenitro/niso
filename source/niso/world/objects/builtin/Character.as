@@ -1,15 +1,11 @@
 package niso.world.objects.builtin {
-    import flash.utils.Dictionary;
-
     import niso.geom.Direction;
-
     import niso.geom.Directions;
     import niso.world.objects.IsometricBehavior;
     import niso.world.objects.IsometricDisplayObject;
     import niso.world.objects.IsometricMovieClip;
 
     import nmath.vectors.TVector3D;
-    import nmath.vectors.Vector2D;
 
     import npathfinding.base.Heuristic;
     import npathfinding.base.Node;
@@ -118,7 +114,5 @@ package niso.world.objects.builtin {
 				dispatchEventWith(MOVE_COMPLETE, false, object);
 			}
 		};
-
-
 	};
 }
