@@ -38,8 +38,6 @@ package niso.world.objects {
 
             _frameRate = pFrameRate;
 
-            _animation = pAnimation;
-
             setTextures(pAnimation);
         };
 

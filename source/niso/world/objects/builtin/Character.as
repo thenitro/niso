@@ -63,12 +63,13 @@ package niso.world.objects.builtin {
             _route = _pathfinder.findPath(object.x, object.z,
                                           pDestinationX, pDestinationZ,
                                           moveHeuristric);
-            _route.shift();
 			
 			if (!_route || _route.length == 0) {
 				dispatchEventWith(MOVE_COMPLETE, false, object);
 				return;
 			}
+
+            _route.shift();
 			
 			_destinationX = pDestinationX;
 			_destinationZ = pDestinationZ;

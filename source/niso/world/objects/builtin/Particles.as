@@ -42,8 +42,6 @@ package niso.world.objects.builtin {
         };
 
         override public function setObject(pObject:IsometricDisplayObject):void {
-            trace('Particles.setObject:');
-
             super.setObject(pObject);
 
             var file:TFile = _library.getByID(particleFile);
@@ -51,8 +49,6 @@ package niso.world.objects.builtin {
             if (!file) {
                 return;
             }
-
-            trace('Particles.setObject:', file);
 
             _emitter = new ParticlesEmitter();
 
