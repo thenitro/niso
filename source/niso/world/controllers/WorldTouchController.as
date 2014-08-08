@@ -14,7 +14,9 @@ package niso.world.controllers {
 
     public class WorldTouchController extends EventDispatcher {
         public static const TOUCH_EVENT:String = 'touch_event';
-        public static const MOVE_EVENT:String  = 'move_event';
+
+        public static const MOVE_EVENT:String            = 'move_event';
+        public static const MOVE_EVENT_COMPLETED:String  = 'move_event_completed';
 
         private static var _pool:Pool = Pool.getInstance();
 
@@ -76,6 +78,8 @@ package niso.world.controllers {
             if (touch.phase == TouchPhase.ENDED) {
                 if (_calc.lengthSquared() < 10) {
                     dispatchEventWith(TOUCH_EVENT, false, _start);
+                } else {
+                    dispatchEventWith(MOVE_EVENT_COMPLETED, false, offset);
                 }
             }
         };

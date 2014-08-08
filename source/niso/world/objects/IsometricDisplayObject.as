@@ -26,7 +26,7 @@ package niso.world.objects {
 		private var _layer:IsometricLayer;
 		
 		private var _view:DisplayObject;
-        private var _parent:DisplayObjectContainer;
+        protected var _parent:DisplayObjectContainer;
 
 		private var _behavior:IsometricBehavior;
 
@@ -116,11 +116,13 @@ package niso.world.objects {
         };
 
         public function set visible(pValue:Boolean):void {
-            if (pValue) {
+            _view.visible = pValue;
+
+            /*if (pValue) {
                 _parent.addChild(_view);
             } else {
                 _parent.removeChild(_view);
-            }
+            }*/
 
             if (_behavior) {
                 _behavior.visible = pValue;

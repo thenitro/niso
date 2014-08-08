@@ -7,8 +7,10 @@ package niso.world {
 	import flash.utils.Dictionary;
 	
 	import npooling.Pool;
-	
-	import starling.display.Sprite;
+
+    import starling.core.Starling;
+
+    import starling.display.Sprite;
 	import starling.events.Event;
     import starling.events.EventDispatcher;
     import starling.events.ResizeEvent;
@@ -127,7 +129,9 @@ package niso.world {
         private function addedToStageEventHandler(pEvent:Event):void {
             _canvas.removeEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
             _canvas.stage.addEventListener(ResizeEvent.RESIZE, resizeEventHandler);
-            _canvas.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+            //_canvas.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+
+            Starling.juggler.repeatCall(sortAll, 0.25);
         };
 
         private function resizeEventHandler(pEvent:ResizeEvent):void {

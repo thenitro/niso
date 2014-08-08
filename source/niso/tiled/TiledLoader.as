@@ -144,6 +144,7 @@ package niso.tiled {
 			}
 			
 			layer.sort();
+            layer.canvas.flatten();
         };
 		
 		private function parseObjectGroup(pData:XML, pLayerID:uint):void {
