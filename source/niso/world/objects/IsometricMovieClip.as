@@ -1,4 +1,6 @@
 package niso.world.objects {
+    import niso.world.objects.abstract.IPlayable;
+
     import starling.core.Starling;
     import starling.display.DisplayObject;
     import starling.display.MovieClip;
@@ -6,7 +8,7 @@ package niso.world.objects {
     import starling.textures.TextureAtlas;
     import starling.textures.TextureSmoothing;
 
-    public class IsometricMovieClip extends IsometricDisplayObject {
+    public class IsometricMovieClip extends IsometricDisplayObject implements IPlayable {
         private var _view:Sprite;
 
         private var _atlas:TextureAtlas;
@@ -19,12 +21,24 @@ package niso.world.objects {
         private var _animation:String;
         private var _flip:Boolean;
 
+        private var _movie:MovieClip;
+
         public function IsometricMovieClip() {
             super();
         };
 
         override public function get reflection():Class {
             return IsometricMovieClip;
+        };
+
+        override public function set visible(pValue:Boolean):void {
+            super.visible = pValue;
+
+            if (pValue) {
+                Starling.juggler.add(_movie);
+            } else {
+                Starling.juggler.remove(_movie);
+            }
         };
 
         public function setAtlas(pAtlas:TextureAtlas,
@@ -38,10 +52,10 @@ package niso.world.objects {
 
             _frameRate = pFrameRate;
 
-            setTextures(pAnimation);
+            gotoAndPlay(pAnimation);
         };
 
-        public function setTextures(pAnimation:String, pFlip:Boolean = false):void {
+        public function gotoAndPlay(pAnimation:String, pFlip:Boolean = false):void {
             if (_animation == pAnimation && _flip == pFlip) {
                 return;
             }
@@ -51,21 +65,21 @@ package niso.world.objects {
 
             _view.removeChildren(0, -1, true);
 
-            var movie:MovieClip = new MovieClip(_atlas.getTextures(_animation),
+            _movie = new MovieClip(_atlas.getTextures(_animation),
                                                 _frameRate);
 
-                movie.pivotX    = _pivotX;
-                movie.pivotY    = _pivotY;
+            _movie.pivotX    = _pivotX;
+            _movie.pivotY    = _pivotY;
 
-                movie.scaleX = pFlip ? -1 : 1;
+            _movie.scaleX = pFlip ? -1 : 1;
 
-                movie.smoothing = TextureSmoothing.NONE;
+            _movie.smoothing = TextureSmoothing.NONE;
 
-                movie.play();
+            _movie.play();
 
-            _view.addChild(movie);
+            _view.addChild(_movie);
 
-            Starling.juggler.add(movie);
+            Starling.juggler.add(_movie);
         };
 
         override protected function init():DisplayObject {

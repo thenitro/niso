@@ -1,17 +1,10 @@
 package niso.files {
-    import flash.utils.ByteArray;
-
-    import ngine.files.Library;
-
     import ngine.files.TFile;
 
     import starling.events.Event;
-
     import starling.events.EventDispatcher;
 
     public class NIOFilesParser extends EventDispatcher {
-        private static var _library:Library = Library.getInstance();
-
         private var _files:Vector.<TFile>;
         private var _loading:Vector.<NIOFormat>;
 

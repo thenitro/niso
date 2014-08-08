@@ -1,12 +1,8 @@
 package niso.world.objects.builtin {
     import com.thenitro.ngine.particles.abstract.emitters.ParticlesEmitter;
-    import com.thenitro.ngine.particles.abstract.emitters.position.ParticlesPosition;
-    import com.thenitro.ngine.particles.abstract.emitters.position.PointParticles;
     import com.thenitro.ngine.particles.abstract.emitters.position.RectangleParticles;
     import com.thenitro.ngine.particles.abstract.loader.EmitterParametersLoader;
     import com.thenitro.ngine.particles.abstract.particles.ImageParticle;
-
-    import flash.display.BitmapData;
 
     import flash.utils.ByteArray;
 
@@ -18,7 +14,6 @@ package niso.world.objects.builtin {
 
     import nmath.vectors.Vector2D;
 
-    import starling.core.Starling;
     import starling.display.BlendMode;
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
@@ -37,8 +32,14 @@ package niso.world.objects.builtin {
             super();
         };
 
-        public function init(pFileID:String, pTextureID:String):void {
+        override public function set visible(pValue:Boolean):void {
+            super.visible = pValue;
 
+            if (pValue) {
+                object.view.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+            } else {
+                object.view.removeEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+            }
         };
 
         override public function setObject(pObject:IsometricDisplayObject):void {
@@ -71,8 +72,6 @@ package niso.world.objects.builtin {
             _emitter.blendMode = BlendMode.MULTIPLY;
 
             ba.clear();
-
-            pObject.view.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
         };
 
         private function enterFrameEventHandler(pEvent:EnterFrameEvent):void {

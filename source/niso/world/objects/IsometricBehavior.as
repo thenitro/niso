@@ -9,6 +9,8 @@ package niso.world.objects {
 
         private var _disposed:Boolean;
 		private var _object:IsometricDisplayObject;
+
+        private var _visible:Boolean;
 		
 		public function IsometricBehavior() {
 			super();
@@ -25,6 +27,14 @@ package niso.world.objects {
 		public function get object():IsometricDisplayObject {
 			return _object;
 		};
+
+        public function get visible():Boolean {
+            return _visible;
+        };
+
+        public function set visible(pValue:Boolean):void {
+            _visible = pValue;
+        };
 		
 		public function setObject(pObject:IsometricDisplayObject):void {
 			_object = pObject;

@@ -31,7 +31,7 @@ package niso.world.objects {
 				image.pivotY    = pPivotY;
 
 				image.smoothing = TextureSmoothing.NONE;
-				
+
 			_view.addChild(image);
 		};
 		

@@ -3,7 +3,7 @@ package niso.world.objects.builtin {
     import niso.geom.Directions;
     import niso.world.objects.IsometricBehavior;
     import niso.world.objects.IsometricDisplayObject;
-    import niso.world.objects.IsometricMovieClip;
+    import niso.world.objects.abstract.IPlayable;
 
     import nmath.vectors.TVector3D;
 
@@ -92,7 +92,9 @@ package niso.world.objects.builtin {
 
                 var direction:Direction = _directions.getDirection(object.isometricPosition, destination);
 
-                (object as IsometricMovieClip).setTextures(direction.id + '_walk', direction.flip);
+                if (direction) {
+                    (object as IPlayable).gotoAndPlay(direction.id + '_walk', direction.flip);
+                }
 
 				var tween:Tween = new Tween(object, distance / moveSpeed);
 				
@@ -109,7 +111,7 @@ package niso.world.objects.builtin {
 				_moving = false;
 				_route  = null;
 
-                (object as IsometricMovieClip).setTextures('idle');
+                (object as IPlayable).gotoAndPlay('idle_state_0');
 				
 				dispatchEventWith(MOVE_COMPLETE, false, object);
 			}

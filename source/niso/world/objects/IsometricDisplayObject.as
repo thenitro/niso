@@ -8,8 +8,12 @@ package niso.world.objects {
     import npooling.Pool;
 
     import starling.display.DisplayObject;
+    import starling.display.DisplayObjectContainer;
+    import starling.events.Event;
 
     public class IsometricDisplayObject implements IReusable {
+        private static const CULLING_OFFSET:int = 512;
+
 		private static var _pool:Pool = Pool.getInstance();
 
         private var _disposed:Boolean;
@@ -22,8 +26,10 @@ package niso.world.objects {
 		private var _layer:IsometricLayer;
 		
 		private var _view:DisplayObject;
+        private var _parent:DisplayObjectContainer;
+
 		private var _behavior:IsometricBehavior;
-		
+
 		private var _alpha:Number;
 
 		public function IsometricDisplayObject() {
@@ -33,6 +39,8 @@ package niso.world.objects {
 			_isometricPosition = TVector3D.ZERO;
 			
 			_view = init();
+            _view.addEventListener(Event.ADDED_TO_STAGE,
+                                   viewAddedToStageEventHandler);
 		};
 		
 		public function get reflection():Class {
@@ -102,7 +110,23 @@ package niso.world.objects {
         public function get screenPosition():Vector2D {
             return _screenPosition;
         };
-		
+
+        public function get visible():Boolean {
+            return _view.visible;
+        };
+
+        public function set visible(pValue:Boolean):void {
+            if (pValue) {
+                _parent.addChild(_view);
+            } else {
+                _parent.removeChild(_view);
+            }
+
+            if (_behavior) {
+                _behavior.visible = pValue;
+            }
+        };
+
 		public function setLayer(pLayer:IsometricLayer):void {
 			_layer = pLayer;
 		};
@@ -124,7 +148,7 @@ package niso.world.objects {
 			
 			_view.alpha = _alpha;
 		};
-		
+
 		public function poolPrepare():void {
 			_alpha = 1.0;
 		};
@@ -147,5 +171,13 @@ package niso.world.objects {
 		protected function init():DisplayObject {
 			return null;
 		};
+
+        private function viewAddedToStageEventHandler(pEvent:Event):void {
+            var target:DisplayObject = pEvent.target as DisplayObject;
+                target.removeEventListener(Event.ADDED_TO_STAGE,
+                                           viewAddedToStageEventHandler);
+
+            _parent = target.parent;
+        };
 	}
 }
