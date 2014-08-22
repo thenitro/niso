@@ -1,5 +1,6 @@
 package niso.world.controllers {
     import flash.geom.Point;
+    import flash.utils.getTimer;
 
     import niso.world.IsometricWorld;
     import niso.world.layers.IsometricLayer;
@@ -8,6 +9,7 @@ package niso.world.controllers {
     import nthread.Threader;
 
     import starling.display.Stage;
+    import starling.events.Event;
 
     public class IsometricCulling {
         private var _world:IsometricWorld;
@@ -16,23 +18,33 @@ package niso.world.controllers {
 
         private var _threader:Threader;
 
+        private var _layers:Array;
+
         public function IsometricCulling(pWorld:IsometricWorld, pStage:Stage,
-                                         pCullingOffset:Number) {
+                                         pCullingOffset:Number, pLayersToCull:Array) {
             _world         = pWorld;
             _stage         = pStage;
             _cullingOffset = pCullingOffset;
+            _layers        = pLayersToCull;
 
             _threader = new Threader();
-            _threader.init(100, 10000);
+            _threader.init(3, 10000);
+
+            pStage.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
         };
 
         public function update():void {
             _threader.purge();
 
-            var layer:IsometricLayer = _world.getLayerByID(1);
+            for each (var layerID:int in _layers) {
+                var layer:IsometricLayer = _world.getLayerByID(layerID);
+                if (!layer) {
+                    return;
+                }
 
-            for each (var object:IsometricDisplayObject in layer.objects) {
-                _threader.addThread(checkVisibility, [ object ] );
+                for each (var object:IsometricDisplayObject in layer.objects) {
+                    _threader.addThread(checkVisibility, [ object ] );
+                }
             }
         };
 
@@ -89,6 +101,10 @@ package niso.world.controllers {
             }
 
             return false;
+        };
+
+        private function enterFrameEventHandler(pEvent:Event):void {
+            _threader.update();
         };
     }
 }

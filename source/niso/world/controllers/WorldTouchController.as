@@ -60,12 +60,11 @@ package niso.world.controllers {
                 return;
             }
 
-
-
             if (touch.phase == TouchPhase.MOVED) {
                 var end:Vector2D    = Vector2D.fromPoint(location);
                 var offset:Vector2D = end.substract(_start, true);
                     offset.inverse();
+                    offset.multiplyScalar(_world.canvas.scaleX);
 
                 _calc.add(offset);
 

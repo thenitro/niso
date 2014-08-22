@@ -1,21 +1,20 @@
 package niso.world {
-	import niso.geom.IsometricGeometry;
-	import niso.world.layers.IsometricLayer;
-	import niso.world.layers.IsometricLayerSortingType;
-	import niso.world.objects.IsometricDisplayObject;
-	
-	import flash.utils.Dictionary;
-	
-	import npooling.Pool;
+    import flash.utils.Dictionary;
+
+    import niso.geom.IsometricGeometry;
+    import niso.world.layers.IsometricLayer;
+    import niso.world.layers.IsometricLayerSortingType;
+    import niso.world.objects.IsometricDisplayObject;
+
+    import npooling.Pool;
 
     import starling.core.Starling;
-
     import starling.display.Sprite;
-	import starling.events.Event;
+    import starling.events.Event;
     import starling.events.EventDispatcher;
     import starling.events.ResizeEvent;
-	
-	public final class IsometricWorld extends EventDispatcher {
+
+    public final class IsometricWorld extends EventDispatcher {
         public static const POSITION_UPDATE:String = 'position_update';
 
 		private static var _pool:Pool = Pool.getInstance();
@@ -30,14 +29,14 @@ package niso.world {
 		public function IsometricWorld() {
             super();
 
+            _geometry = new IsometricGeometry();
+
             _layersNum = 0;
 
 			_canvas = new Sprite();
 			_canvas.addEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
 			
 			_layers = new Dictionary();
-
-            _geometry = new IsometricGeometry();
 		};
 
 		public function get geometry():IsometricGeometry {

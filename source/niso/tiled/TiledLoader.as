@@ -9,12 +9,24 @@ package niso.tiled {
     import niso.world.layers.IsometricLayerSortingType;
     import niso.world.objects.IsometricSprite;
 
+    import nmath.TQuad;
+    import nmath.vectors.Vector2D;
+
+    import npooling.Pool;
+
     import starling.events.Event;
     import starling.events.EventDispatcher;
     import starling.textures.Texture;
 
     public final class TiledLoader extends EventDispatcher {
         public static const LOADING_COMPLETED:String = 'loading_completed';
+
+        private var _world:IsometricWorld;
+        private var _factory:TiledFactory;
+
+        private var _stagger:Boolean;
+        private var _quad:TQuad;
+        private var _index:Vector2D;
 
         private var _sizeX:int;
         private var _sizeZ:int;
@@ -25,14 +37,10 @@ package niso.tiled {
 		private var _url:String;
         private var _loaded:Boolean;
 
-		private var _world:IsometricWorld;
-		
 		private var _data:XML;
 
 		private var _loaders:Vector.<TilesetLoader>;
 		private var _tilesets:Vector.<TilesetLoader>;
-
-        private var _factory:TiledFactory;
 		
 		public function TiledLoader(pURL:String) {
 			super();
@@ -67,12 +75,35 @@ package niso.tiled {
 				loader.load(new URLRequest(_url));
 		};
 		
-		public function buildLevel(pWorld:IsometricWorld, pFactory:TiledFactory):void {
+		public function buildLevel(pWorld:IsometricWorld, pFactory:TiledFactory, pStagger:Boolean = false):void {
             _world   = pWorld;
+
+            _sizeX = _data.@width;
+            _sizeZ = _data.@height;
 
             _factory = pFactory;
             _factory.setWorld(_world);
-            _factory.initMap(_data.@width, _data.@height);
+            _factory.initMap(_sizeX, _sizeZ);
+
+            _stagger = pStagger;
+
+            if (_stagger) {
+                _quad = TQuad.NEW;
+
+                _quad.a.x =  0;
+                _quad.a.y = _sizeZ / 2;
+
+                _quad.b.x = _sizeX / 2;
+                _quad.b.y =  0;
+
+                _quad.c.x = _sizeX - 1;
+                _quad.c.y = _sizeZ / 2;
+
+                _quad.d.x = _sizeX / 2;
+                _quad.d.y = _sizeZ - 1;
+
+                _index = Vector2D.ZERO;
+            }
 
             _tileWidth  = _data.@tilewidth;
             _tileHeight = _data.@tileheight;
@@ -98,6 +129,9 @@ package niso.tiled {
 			}
 			
 			_world.relocate();
+
+            Pool.getInstance().put(_quad);
+            Pool.getInstance().put(_index);
 		};
 
         public function getTexture(pID:int):Texture {
@@ -113,9 +147,8 @@ package niso.tiled {
         };
 		
 		private function parseLayer(pData:XML, pLayerID:uint):void {
-			var indexX:uint = 0;
-			var indexZ:uint = 0;
-			
+            _index.zero();
+
 			var layer:IsometricLayer = new IsometricLayer();
 				layer.init(pLayerID, false, IsometricLayerSortingType.ON_DEMAND);
 			
@@ -123,23 +156,26 @@ package niso.tiled {
 			
 			for each (var tileAbstract:XML in pData..tile) {
 				if (tileAbstract.@gid != 0) {
-                    var texture:Texture = getTexture(tileAbstract.@gid);
 
-                    var tile:IsometricSprite = _factory.createTile(tileAbstract);
+                    if (makeObject()) {
+                        var texture:Texture = getTexture(tileAbstract.@gid);
 
-                        tile.x = indexX;
-                        tile.z = indexZ;
+                        var tile:IsometricSprite = _factory.createTile(tileAbstract);
 
-                        tile.setTexture(texture, texture.width / 2, texture.height / 2);
+                            tile.x = _index.x;
+                            tile.z = _index.y;
 
-					_world.addObject(pLayerID, tile);
+                            tile.setTexture(texture, texture.width / 2, texture.height / 2);
+
+                        _world.addObject(pLayerID, tile);
+                    }
 				}
+
+				_index.x++;
 				
-				indexX++;
-				
-				if (indexX >= pData.@width) {
-					indexX = 0;
-					indexZ++;
+				if (_index.x >= pData.@width) {
+					_index.x = 0;
+					_index.y++;
 				}
 			}
 			
@@ -157,13 +193,17 @@ package niso.tiled {
                 var halfWidth:int  = Math.ceil(Math.round(objectAbstract.@width  / _tileHeight) / 2) - 1;
                 var halfHeight:int = Math.ceil(Math.round(objectAbstract.@height / _tileHeight) / 2) - 1;
 
-                var indexX:int = Math.round(objectAbstract.@x / _tileHeight) + halfWidth;
-                var indexZ:int = Math.round(objectAbstract.@y / _tileHeight) + halfHeight;
+                _index.x = Math.round(objectAbstract.@x / _tileHeight) + halfWidth;
+                _index.y = Math.round(objectAbstract.@y / _tileHeight) + halfHeight;
+
+                if (!makeObject()) {
+                    continue;
+                }
 
                 var object:IsometricSprite = _factory.createObject(objectAbstract);
 
-                    object.x = indexX;
-                    object.z = indexZ;
+                    object.x = _index.x;
+                    object.z = _index.y;
 
 				_world.addObject(pLayerID, object);
 
@@ -178,6 +218,18 @@ package niso.tiled {
 			
 			return -1;
 		};
+
+        private function makeObject():Boolean {
+            if (_stagger) {
+                if (_quad.isPointInside(_index)) {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
+        };
 		
 		private function completeEventHandler(pEvent:flash.events.Event):void {
 			var target:URLLoader = pEvent.target as URLLoader;

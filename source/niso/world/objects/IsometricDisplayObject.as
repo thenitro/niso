@@ -118,12 +118,6 @@ package niso.world.objects {
         public function set visible(pValue:Boolean):void {
             _view.visible = pValue;
 
-            /*if (pValue) {
-                _parent.addChild(_view);
-            } else {
-                _parent.removeChild(_view);
-            }*/
-
             if (_behavior) {
                 _behavior.visible = pValue;
             }

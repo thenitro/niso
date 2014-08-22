@@ -2,6 +2,8 @@ package niso.geom {
     import flash.errors.IllegalOperationError;
     import flash.utils.Dictionary;
 
+    import nmath.Geometry;
+
     import nmath.vectors.TVector3D;
     import nmath.vectors.Vector2D;
 
@@ -113,6 +115,8 @@ package niso.geom {
         public function getDirection(pStart:TVector3D,
                                      pDestination:TVector3D):Direction {
             var angle:Number = getAngle(pStart, pDestination);
+
+            //trace('Directions.getDirection:', angle);
 
             return _directions[angle];
         };
