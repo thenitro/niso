@@ -127,20 +127,10 @@ package niso.world {
 
         private function addedToStageEventHandler(pEvent:Event):void {
             _canvas.removeEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
-            _canvas.stage.addEventListener(ResizeEvent.RESIZE, resizeEventHandler);
-            //_canvas.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
 
             Starling.juggler.repeatCall(sortAll, 0.25);
         };
 
-        private function resizeEventHandler(pEvent:ResizeEvent):void {
-            relocate();
-        };
-
-        private function enterFrameEventHandler(pEvent:Event):void {
-            sortAll();
-        };
-		
 		private function sortAll():void {
 			for each (var layer:IsometricLayer in _layers) {
 				if (layer.sortingType == IsometricLayerSortingType.ALWAYS) {
