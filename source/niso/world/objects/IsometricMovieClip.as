@@ -41,6 +41,11 @@ package niso.world.objects {
             }
         };
 
+        override public function poolPrepare():void {
+            super.poolPrepare();
+            clean();
+        };
+
         public function setAtlas(pAtlas:TextureAtlas,
                                  pPivotX:Number, pPivotY:Number,
                                  pFrameRate:int,
@@ -63,7 +68,7 @@ package niso.world.objects {
             _animation = pAnimation;
             _flip      = pFlip;
 
-            _view.removeChildren(0, -1, true);
+            clean();
 
             _movie = new MovieClip(_atlas.getTextures(_animation),
                                                 _frameRate);
@@ -86,6 +91,12 @@ package niso.world.objects {
             _view = new Sprite();
 
             return _view;
+        };
+
+        private function clean():void {
+            Starling.juggler.remove(_movie);
+
+            _view.removeChildren(0, -1, true);
         };
     };
 }

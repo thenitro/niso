@@ -20,6 +20,14 @@ package niso.world.controllers {
                                     worldPositionUpdateEventHandler);
         };
 
+        public function start():void {
+            _culling.start();
+        };
+
+        public function stop():void {
+            _culling.stop();
+        };
+
         private function worldPositionUpdateEventHandler(pEvent:Event):void {
             _culling.update();
         };

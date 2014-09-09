@@ -1,6 +1,5 @@
 package niso.world.controllers {
     import flash.geom.Point;
-    import flash.utils.getTimer;
 
     import niso.world.IsometricWorld;
     import niso.world.layers.IsometricLayer;
@@ -29,8 +28,15 @@ package niso.world.controllers {
 
             _threader = new Threader();
             _threader.init(3, 10000);
+        };
 
-            pStage.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+        public function start():void {
+            _stage.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+        };
+
+        public function stop():void {
+            _threader.purge();
+            _stage.removeEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
         };
 
         public function update():void {
@@ -49,6 +55,10 @@ package niso.world.controllers {
         };
 
         private function checkVisibility(pObject:IsometricDisplayObject):void {
+            if (pObject.disposed) {
+                return;
+            }
+
             if (isInViewport(pObject)) {
                 pObject.visible = true;
             } else {

@@ -32,12 +32,14 @@ package niso.world.layers {
 		private var _useLuft:Boolean;
 		
 		private var _sortingType:uint;
+        private var _objectsNum:int;
 		
 		public function IsometricLayer() {
 			_canvas  = new Sprite();
 			_objects = new Dictionary();
 			
 			_matrix = MatrixMxN.EMPTY;
+            _objectsNum = 0;
 		};
 
         public static function get NEW():IsometricLayer {
@@ -78,6 +80,10 @@ package niso.world.layers {
 		public function get objects():Dictionary {
 			return _objects;
 		};
+
+        public function get objectsNum():int {
+            return _objectsNum;
+        };
 		
 		/**
 		 * 
@@ -120,6 +126,8 @@ package niso.world.layers {
 			_canvas.addChild(pObject.view);
 			
 			_matrix.add(pObject.x, pObject.z, pObject);
+
+            _objectsNum++;
 			
 			if (_sortingType == IsometricLayerSortingType.ON_CHANGE) {
 				sort();
@@ -132,6 +140,8 @@ package niso.world.layers {
 			_canvas.removeChild(pObject.view);
 
 			_matrix.remove(pObject.x, pObject.z);
+
+            _objectsNum--;
 			
 			if (_sortingType == IsometricLayerSortingType.ON_CHANGE) {
 				sort();
@@ -150,12 +160,18 @@ package niso.world.layers {
 			_canvas.removeChildren();
 			
 			for each (var object:IsometricDisplayObject in _objects) {
-				remove(object);
-				
 				_pool.put(object);
 			}
+
+            for each (var objectID:Object in _objects) {
+                delete _objects[objectID];
+            }
 			
 			_matrix.clean();
+
+            _objectsNum = 0;
+
+            _canvas.unflatten();
 		};
 		
 		public function poolPrepare():void {

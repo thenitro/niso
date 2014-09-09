@@ -32,6 +32,10 @@ package niso.world.objects.builtin {
             super();
         };
 
+        override public function get reflection():Class {
+            return Particles;
+        };
+
         override public function set visible(pValue:Boolean):void {
             super.visible = pValue;
 

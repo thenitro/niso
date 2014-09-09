@@ -15,6 +15,12 @@ package niso.world.objects {
 		override public function get reflection():Class {
 			return IsometricSprite;
 		};
+
+        override public function poolPrepare():void {
+            super.poolPrepare();
+
+            _view.removeChildren(0, -1, true);
+        };
 		
 		public function setTexture(pTexture:Texture,
                                    pPivotX:Number, pPivotY:Number):void {

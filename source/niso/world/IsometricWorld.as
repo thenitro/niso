@@ -12,7 +12,6 @@ package niso.world {
     import starling.display.Sprite;
     import starling.events.Event;
     import starling.events.EventDispatcher;
-    import starling.events.ResizeEvent;
 
     public final class IsometricWorld extends EventDispatcher {
         public static const POSITION_UPDATE:String = 'position_update';
@@ -23,6 +22,7 @@ package niso.world {
 		private var _layers:Dictionary;
 
         private var _layersNum:int;
+        private var _objectsNum:int;
 		
 		private var _geometry:IsometricGeometry;
 		
@@ -31,7 +31,8 @@ package niso.world {
 
             _geometry = new IsometricGeometry();
 
-            _layersNum = 0;
+            _layersNum  = 0;
+            _objectsNum = 0;
 
 			_canvas = new Sprite();
 			_canvas.addEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
@@ -59,6 +60,10 @@ package niso.world {
             return _layersNum;
         };
 
+        public function get objectsNum():int {
+            return _objectsNum;
+        };
+
         public function setPosition(pX:Number, pY:Number):void {
             _canvas.x = pX;
             _canvas.y = pY;
@@ -78,6 +83,11 @@ package niso.world {
 		};
 		
 		public function addLayer(pLayer:IsometricLayer):void {
+            if (_layers[pLayer.id]) {
+                trace('IsometricWorld.addLayer: already have layer with id', pLayer.id);
+                return;
+            }
+
 			pLayer.setWorld(this);
 
 			_layers[pLayer.id] = pLayer;
@@ -87,6 +97,11 @@ package niso.world {
 		};
 		
 		public function removeLayer(pLayer:IsometricLayer):void {
+            if (!_layers[pLayer.id]) {
+                trace('IsometricWorld.removeLayer: there is not layer with id', pLayer.id);
+                return;
+            }
+
 			delete _layers[pLayer.id];
             _layersNum--;
 			
@@ -101,6 +116,8 @@ package niso.world {
 
 			var layer:IsometricLayer = _layers[pLayerID] as IsometricLayer;
 				layer.add(pObject);
+
+            _objectsNum++;
 		};
 		
 		public function removeObject(pLayerID:uint,
@@ -111,6 +128,8 @@ package niso.world {
 
 			var layer:IsometricLayer = _layers[pLayerID] as IsometricLayer;
 				layer.remove(pObject);
+
+            _objectsNum--;
 		};
 		
 		public function clean():void {
@@ -119,10 +138,13 @@ package niso.world {
 			for each (var layer:IsometricLayer in _layers) {
 				_pool.put(layer);
 			}
-			
+
 			for (var layerID:Object in _layers) {
 				delete _layers[layerID];
 			}
+
+            _layersNum  = 0;
+            _objectsNum = 0;
 		};
 
         private function addedToStageEventHandler(pEvent:Event):void {

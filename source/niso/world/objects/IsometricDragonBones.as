@@ -21,6 +21,10 @@ package niso.world.objects {
             super();
         };
 
+        override public function get reflection():Class {
+            return IsometricDragonBones;
+        };
+
         override public function set visible(pValue:Boolean):void {
             super.visible = pValue;
 
