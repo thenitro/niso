@@ -35,9 +35,14 @@ package niso.world.objects {
             }
         };
 
+        override public function poolPrepare():void {
+            clean();
+            super.poolPrepare();
+        };
+
         public function buildArmature(pArmatureID:String,
                                       pFactory:StarlingFactory):void {
-            _view.removeChildren(0, -1, true);
+            clean();
 
             _armature = pFactory.buildArmature(pArmatureID);
             _sprite   = _armature.display as Sprite;
@@ -63,6 +68,15 @@ package niso.world.objects {
             _view = new Sprite();
 
             return _view;
+        };
+
+        private function clean():void {
+            _view.removeChildren(0, -1, true);
+
+            _animation = null;
+
+            _armature = null;
+            _sprite   = null;
         };
     };
 }

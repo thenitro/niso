@@ -25,9 +25,8 @@ package niso.world.objects.builtin {
 		
 		private var _moving:Boolean;
 		private var _route:Vector.<Node>;
-		
-		private var _destinationX:int;
-		private var _destinationZ:int;
+
+        private var _currentTween:Tween;
 		
 		public function Character() {
 			super();
@@ -40,7 +39,13 @@ package niso.world.objects.builtin {
 		public function get moving():Boolean {
 			return _moving;
 		};
-		
+
+        override public function poolPrepare():void {
+            haltMoving();
+
+            super.poolPrepare();
+        };
+
 		override public function setObject(pObject:IsometricDisplayObject):void {
 			super.setObject(pObject);
 		};
@@ -66,12 +71,22 @@ package niso.world.objects.builtin {
 			}
 
             _route.shift();
-			
-			_destinationX = pDestinationX;
-			_destinationZ = pDestinationZ;
 
 			startMoving();
 		};
+
+        public function stopMoving():void {
+            _route.length = 0;
+        };
+
+        private function haltMoving():void {
+            _moving = false;
+            _route  = null;
+
+            Starling.juggler.remove(_currentTween);
+
+            _currentTween = null;
+        };
 		
 		private function startMoving():void {
 			_moving = true;
@@ -96,15 +111,15 @@ package niso.world.objects.builtin {
                     (object as IPlayable).gotoAndPlay(direction.id + '_walk', direction.flip);
                 }
 
-				var tween:Tween = new Tween(object, distance / moveSpeed);
-				
-					tween.animate('x', destination.x);
-					tween.animate('z', destination.z);
+                _currentTween = new Tween(object, distance / moveSpeed);
+
+                _currentTween.animate('x', destination.x);
+                _currentTween.animate('z', destination.z);
+
+                _currentTween.onComplete = nextPoint;
+                _currentTween.onUpdate   = object.updateScreenPosition;
 					
-					tween.onComplete = nextPoint;
-					tween.onUpdate   = object.updateScreenPosition;
-					
-				Starling.juggler.add(tween);
+				Starling.juggler.add(_currentTween);
 
 				_pool.put(destination);
 			} else {

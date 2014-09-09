@@ -18,30 +18,39 @@ package niso.world.objects.builtin {
 			return Obstacle;
 		};
 
+        override public function poolPrepare():void {
+            setState(_pathfinder.setWalkable);
+
+            super.poolPrepare();
+        };
+
+		override public function setObject(pObject:IsometricDisplayObject):void {
+			super.setObject(pObject);
+            setState(_pathfinder.setUnWalkable);
+		};
+
         public function init(pSizeX:int, pSizeZ:int):void {
             _sizeX = pSizeX;
             _sizeZ = pSizeZ;
         };
 
-		override public function setObject(pObject:IsometricDisplayObject):void {
-			super.setObject(pObject);
-
+        private function setState(pState:Function):void {
             if (_sizeX == 0 && _sizeZ == 0) {
                 return;
             }
 
             if (_sizeX == 1 && _sizeZ == 1) {
-                _pathfinder.setUnWalkable(pObject.x, pObject.z);
+                pState(object.x, object.z);
             } else {
-                var offsetX:int = pObject.x - int(_sizeX / 2);
-                var offsetZ:int = pObject.z - int(_sizeZ / 2);
+                var offsetX:int = object.x - int(_sizeX / 2);
+                var offsetZ:int = object.z - int(_sizeZ / 2);
 
                 for (var i:int = offsetX; i < offsetX + _sizeX; i++) {
                     for (var j:int = offsetZ; j < offsetZ + _sizeZ; j++) {
-                        _pathfinder.setUnWalkable(i, j);
+                        pState(i, j);
                     }
                 }
             }
-		};
+        };
 	};
 }

@@ -78,6 +78,17 @@ package niso.world.objects.builtin {
             ba.clear();
         };
 
+        override public function poolPrepare():void {
+            object.view.removeEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+
+            particleFile    = null;
+            particleTexture = null;
+
+            _pool.put(_emitter);
+
+            super.poolPrepare();
+        };
+
         private function enterFrameEventHandler(pEvent:EnterFrameEvent):void {
             _emitter.update(pEvent.passedTime);
         };

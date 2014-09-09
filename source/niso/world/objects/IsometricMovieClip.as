@@ -11,8 +11,6 @@ package niso.world.objects {
     public class IsometricMovieClip extends IsometricDisplayObject implements IPlayable {
         private var _view:Sprite;
 
-        private var _atlas:TextureAtlas;
-
         private var _pivotX:Number;
         private var _pivotY:Number;
 
@@ -21,6 +19,7 @@ package niso.world.objects {
         private var _animation:String;
         private var _flip:Boolean;
 
+        private var _atlas:TextureAtlas;
         private var _movie:MovieClip;
 
         public function IsometricMovieClip() {
@@ -42,8 +41,8 @@ package niso.world.objects {
         };
 
         override public function poolPrepare():void {
-            super.poolPrepare();
             clean();
+            super.poolPrepare();
         };
 
         public function setAtlas(pAtlas:TextureAtlas,
@@ -97,6 +96,11 @@ package niso.world.objects {
             Starling.juggler.remove(_movie);
 
             _view.removeChildren(0, -1, true);
+
+            _movie = null;
+            _atlas = null;
+
+            _animation = null;
         };
     };
 }

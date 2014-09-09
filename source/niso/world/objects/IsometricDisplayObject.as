@@ -153,10 +153,10 @@ package niso.world.objects {
             _screenPosition.zero();
             _isometricPosition.zero();
 
-            _layer = null;
-
             _pool.put(_behavior);
             _behavior = null;
+
+            _layer = null;
 		};
 		
 		public function dispose():void {
@@ -167,9 +167,7 @@ package niso.world.objects {
 			
 			_screenPosition    = null;
 			_isometricPosition = null;
-			
-			_layer = null;
-			
+
 			_view.dispose();
 			_view = null;
 

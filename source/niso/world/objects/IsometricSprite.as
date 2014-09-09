@@ -17,9 +17,9 @@ package niso.world.objects {
 		};
 
         override public function poolPrepare():void {
-            super.poolPrepare();
-
             _view.removeChildren(0, -1, true);
+
+            super.poolPrepare();
         };
 		
 		public function setTexture(pTexture:Texture,

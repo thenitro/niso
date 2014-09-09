@@ -42,6 +42,8 @@ package niso.world.objects {
 		
 		public function poolPrepare():void {
 			removeEventListeners();
+
+            _object = null;
 		};
 		
 		public function dispose():void {
