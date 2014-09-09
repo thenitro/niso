@@ -39,6 +39,17 @@ package niso.world.layers {
 			
 			_matrix = MatrixMxN.EMPTY;
 		};
+
+        public static function get NEW():IsometricLayer {
+            var result:IsometricLayer = _pool.get(IsometricLayer) as IsometricLayer;
+
+            if (!result) {
+                result = new IsometricLayer();
+                _pool.allocate(IsometricLayer, 1);
+            }
+
+            return result;
+        };
 		
 		public function get reflection():Class {
 			return IsometricLayer;

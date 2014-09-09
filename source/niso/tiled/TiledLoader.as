@@ -129,7 +129,7 @@ package niso.tiled {
 		private function parseLayer(pData:XML, pLayerID:uint):void {
             _index.zero();
 
-			var layer:IsometricLayer = new IsometricLayer();
+			var layer:IsometricLayer = IsometricLayer.NEW;
 				layer.init(pLayerID, false, IsometricLayerSortingType.ON_DEMAND);
 			
 			_world.addLayer(layer);

@@ -64,9 +64,15 @@ package niso.files {
         };
 
         public function load(pFile:TFile):void {
+            if (pFile.content is NIOFormat) {
+                dispatchEventWith(PARSING_COMPLETED);
+                return;
+            }
+
             _file = pFile;
 
-            var content:ByteArray = pFile.content as ByteArray;
+            var content:ByteArray = _file.content as ByteArray;
+                content.position = 0;
 
             _offsetX = content.readInt();
             _offsetY = content.readInt();
