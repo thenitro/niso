@@ -150,7 +150,7 @@ package niso.world {
         private function addedToStageEventHandler(pEvent:Event):void {
             _canvas.removeEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
 
-            Starling.juggler.repeatCall(sortAll, 0.25);
+            Starling.juggler.repeatCall(sortAll, 0.1);
         };
 
 		private function sortAll():void {

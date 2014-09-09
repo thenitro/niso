@@ -163,7 +163,7 @@ package niso.tiled {
         };
 		
 		private function parseObjectGroup(pData:XML, pLayerID:uint):void {
-            trace('TiledLoader.parseObjectGroup:');
+            trace('TiledLoader.parseObjectGroup:', pLayerID);
 
 			var layer:IsometricLayer = IsometricLayer.NEW;
 				layer.init(pLayerID, false, IsometricLayerSortingType.ALWAYS);
