@@ -61,7 +61,7 @@ package niso.world.objects.builtin {
             _emitter.ParticleClass = ImageParticle;
             _emitter.particleData  = _library.getByID(particleTexture).content as Texture;
 
-            var particlePosition:RectangleParticles = new RectangleParticles();
+            var particlePosition:RectangleParticles = RectangleParticles.NEW;
                 particlePosition.init(_emitter, new Vector2D(20, 20));
 
             _emitter.particlesPosition = particlePosition;
