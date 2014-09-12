@@ -1,10 +1,14 @@
 package niso.world {
     import flash.utils.Dictionary;
 
+    import ngine.display.scale.IScalable;
+
     import niso.geom.IsometricGeometry;
     import niso.world.layers.IsometricLayer;
     import niso.world.layers.IsometricLayerSortingType;
     import niso.world.objects.IsometricDisplayObject;
+
+    import nmath.TMath;
 
     import npooling.Pool;
 
@@ -13,7 +17,7 @@ package niso.world {
     import starling.events.Event;
     import starling.events.EventDispatcher;
 
-    public final class IsometricWorld extends EventDispatcher {
+    public final class IsometricWorld extends EventDispatcher implements IScalable {
         public static const POSITION_UPDATE:String = 'position_update';
 
 		private static var _pool:Pool = Pool.getInstance();
@@ -25,7 +29,18 @@ package niso.world {
         private var _objectsNum:int;
 		
 		private var _geometry:IsometricGeometry;
-		
+
+        private var _scale:Number;
+        private var _scaleFactor:Number;
+
+        private var _viewportWidth:Number;
+        private var _viewportHeight:Number;
+
+        private var _topOffset:Number;
+
+        private var _width:Number;
+        private var _height:Number;
+
 		public function IsometricWorld() {
             super();
 
@@ -36,8 +51,14 @@ package niso.world {
 
 			_canvas = new Sprite();
 			_canvas.addEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
-			
+
 			_layers = new Dictionary();
+
+            _scale = 1.0;
+            _scaleFactor = 1.0;
+
+            _viewportWidth = 0.0;
+            _viewportHeight = 0.0;
 		};
 
 		public function get geometry():IsometricGeometry {
@@ -64,6 +85,11 @@ package niso.world {
             return _objectsNum;
         };
 
+        public function calculateDimensions():void {
+            _width  = _canvas.width;
+            _height = _canvas.height;
+        };
+
         public function setPosition(pX:Number, pY:Number):void {
             _canvas.x = pX;
             _canvas.y = pY;
@@ -71,12 +97,31 @@ package niso.world {
             dispatchEventWith(POSITION_UPDATE);
         };
 
-		public function relocate():void {
-			var centerX:int = Math.ceil(_canvas.stage.stageWidth / 2);
-			var centerY:int = Math.ceil((_canvas.stage.stageHeight - _canvas.height) / 2);
+        public function scale(pScale:Number, pScaleFactor:Number):void {
+            trace('IsometricWorld.scale:', pScale, pScaleFactor);
+
+            _scale       = pScale;
+            _scaleFactor = pScaleFactor;
+
+            clamp(_viewportWidth, _viewportHeight, _topOffset);
+        };
+
+		public function center():void {
+			var centerX:int = Math.ceil((_canvas.stage.stageWidth * _scaleFactor)  / 2);
+			var centerY:int = Math.ceil(((_canvas.stage.stageHeight * _scaleFactor) - _canvas.height) / 2);
 			
             setPosition(centerX, centerY);
 		};
+
+        public function clamp(pWidth:Number, pHeight:Number, pTopOffset:Number):void {
+            _viewportWidth  = pWidth;
+            _viewportHeight = pHeight;
+
+            _topOffset = pTopOffset;
+
+            _canvas.x = TMath.clamp(_canvas.x, -(_width / 2 - (pWidth  * _scaleFactor)), _width / 2);
+            _canvas.y = TMath.clamp(_canvas.y, -(_height -    (pHeight * _scaleFactor) - (_geometry.tileHeight * _scaleFactor) / 2), pTopOffset);
+        };
 		
 		public function getLayerByID(pID:int):IsometricLayer {
 			return _layers[pID] as IsometricLayer;

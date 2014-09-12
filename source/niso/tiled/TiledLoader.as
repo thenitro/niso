@@ -109,7 +109,7 @@ package niso.tiled {
 				layerID++;
 			}
 			
-			_world.relocate();
+			_world.center();
 
             Pool.getInstance().put(_index);
 		};
