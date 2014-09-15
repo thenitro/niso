@@ -8,8 +8,6 @@ package niso.world {
     import niso.world.layers.IsometricLayerSortingType;
     import niso.world.objects.IsometricDisplayObject;
 
-    import nmath.TMath;
-
     import npooling.Pool;
 
     import starling.core.Starling;
@@ -33,11 +31,6 @@ package niso.world {
         private var _scale:Number;
         private var _scaleFactor:Number;
 
-        private var _viewportWidth:Number;
-        private var _viewportHeight:Number;
-
-        private var _topOffset:Number;
-
         private var _width:Number;
         private var _height:Number;
 
@@ -56,9 +49,6 @@ package niso.world {
 
             _scale = 1.0;
             _scaleFactor = 1.0;
-
-            _viewportWidth = 0.0;
-            _viewportHeight = 0.0;
 		};
 
 		public function get geometry():IsometricGeometry {
@@ -85,6 +75,14 @@ package niso.world {
             return _objectsNum;
         };
 
+        public function get width():Number {
+            return _width;
+        };
+
+        public function get height():Number {
+            return _height;
+        };
+
         public function calculateDimensions():void {
             _width  = _canvas.width;
             _height = _canvas.height;
@@ -98,31 +96,17 @@ package niso.world {
         };
 
         public function scale(pScale:Number, pScaleFactor:Number):void {
-            trace('IsometricWorld.scale:', pScale, pScaleFactor);
-
             _scale       = pScale;
             _scaleFactor = pScaleFactor;
-
-            clamp(_viewportWidth, _viewportHeight, _topOffset);
         };
 
-		public function center():void {
+		public function center(pByX:Boolean = true, pByY:Boolean = true):void {
 			var centerX:int = Math.ceil((_canvas.stage.stageWidth * _scaleFactor)  / 2);
 			var centerY:int = Math.ceil(((_canvas.stage.stageHeight * _scaleFactor) - _canvas.height) / 2);
 			
-            setPosition(centerX, centerY);
+            setPosition(pByX ? centerX : _canvas.x, pByY ? centerY : _canvas.y);
 		};
 
-        public function clamp(pWidth:Number, pHeight:Number, pTopOffset:Number):void {
-            _viewportWidth  = pWidth;
-            _viewportHeight = pHeight;
-
-            _topOffset = pTopOffset;
-
-            _canvas.x = TMath.clamp(_canvas.x, -(_width / 2 - (pWidth  * _scaleFactor)), _width / 2);
-            _canvas.y = TMath.clamp(_canvas.y, -(_height -    (pHeight * _scaleFactor) - (_geometry.tileHeight * _scaleFactor) / 2), pTopOffset);
-        };
-		
 		public function getLayerByID(pID:int):IsometricLayer {
 			return _layers[pID] as IsometricLayer;
 		};

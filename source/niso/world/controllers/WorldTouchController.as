@@ -46,8 +46,6 @@ package niso.world.controllers {
         };
 
         private function layerTouchEventHandler(pEvent:TouchEvent):void {
-            trace('WorldTouchController.layerTouchEventHandler:', pEvent.touches);
-
             if (pEvent.touches.length == 1) {
                 processTapOrPan(pEvent.getTouch(_world.canvas));
                 return;
@@ -106,9 +104,10 @@ package niso.world.controllers {
 
             if (pTouch.phase == TouchPhase.MOVED) {
                 var end:Vector2D    = Vector2D.fromPoint(location);
+
                 var offset:Vector2D = end.substract(_start, true);
-                offset.inverse();
-                offset.multiplyScalar(_world.canvas.scaleX);
+                    offset.inverse();
+                    offset.multiplyScalar(_world.canvas.scaleX);
 
                 _calc.add(offset);
 
