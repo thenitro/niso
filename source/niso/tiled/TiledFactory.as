@@ -4,6 +4,7 @@ package niso.tiled {
     import niso.world.IsometricWorld;
 
     import niso.world.objects.IsometricBehavior;
+    import niso.world.objects.IsometricDisplayObject;
     import niso.world.objects.IsometricSprite;
 
     import npooling.Pool;
@@ -36,7 +37,7 @@ package niso.tiled {
             return object;
         };
 
-        public function createObject(pObjectAbstract:XML):IsometricSprite {
+        public function createObject(pObjectAbstract:XML):IsometricDisplayObject {
             var object:IsometricSprite = _pool.get(IsometricSprite) as IsometricSprite;
 
             if (!object) {
@@ -48,7 +49,7 @@ package niso.tiled {
         };
 
         public function createBehaviour(pObjectAbstract:XML,
-                                        pObject:IsometricSprite):IsometricBehavior {
+                                        pObject:IsometricDisplayObject):IsometricBehavior {
             if (!String(pObjectAbstract.@type).length) {
                 return null;
             }

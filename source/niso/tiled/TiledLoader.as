@@ -7,6 +7,7 @@ package niso.tiled {
     import niso.world.IsometricWorld;
     import niso.world.layers.IsometricLayer;
     import niso.world.layers.IsometricLayerSortingType;
+    import niso.world.objects.IsometricDisplayObject;
     import niso.world.objects.IsometricSprite;
 
     import nmath.TQuad;
@@ -177,7 +178,7 @@ package niso.tiled {
                 _index.x = Math.round(objectAbstract.@x / _tileHeight) + halfWidth;
                 _index.y = Math.round(objectAbstract.@y / _tileHeight) + halfHeight;
 
-                var object:IsometricSprite = _factory.createObject(objectAbstract);
+                var object:IsometricDisplayObject = _factory.createObject(objectAbstract);
 
                     object.x = _index.x;
                     object.z = _index.y;

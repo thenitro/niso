@@ -8,6 +8,7 @@ package niso.world.objects {
     import npooling.Pool;
 
     import starling.display.DisplayObject;
+    import starling.display.DisplayObjectContainer;
     import starling.events.Event;
 
     public class IsometricDisplayObject implements IReusable {
@@ -21,8 +22,8 @@ package niso.world.objects {
 		private var _id:uint;
 		
 		private var _layer:IsometricLayer;
-		
-		private var _view:DisplayObject;
+
+		private var _view:DisplayObjectContainer;
 
 		private var _behavior:IsometricBehavior;
 
@@ -55,7 +56,7 @@ package niso.world.objects {
 			return _layer;
 		};
 		
-		public function get view():DisplayObject {
+		public function get view():DisplayObjectContainer {
 			return _view;
 		};
 		
@@ -174,7 +175,7 @@ package niso.world.objects {
             _disposed = true;
 		};
 		
-		protected function init():DisplayObject {
+		protected function init():DisplayObjectContainer {
 			return null;
 		};
 

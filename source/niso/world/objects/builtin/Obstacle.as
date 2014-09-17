@@ -24,12 +24,17 @@ package niso.world.objects.builtin {
             super.poolPrepare();
         };
 
+        override public function dispose():void {
+            setState(_pathfinder.setWalkable);
+            super.dispose();
+        };
+
 		override public function setObject(pObject:IsometricDisplayObject):void {
 			super.setObject(pObject);
             setState(_pathfinder.setUnWalkable);
 		};
 
-        public function init(pSizeX:int, pSizeZ:int):void {
+        public function setSize(pSizeX:int, pSizeZ:int):void {
             _sizeX = pSizeX;
             _sizeZ = pSizeZ;
         };

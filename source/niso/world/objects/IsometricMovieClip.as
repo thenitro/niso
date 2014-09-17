@@ -3,6 +3,7 @@ package niso.world.objects {
 
     import starling.core.Starling;
     import starling.display.DisplayObject;
+    import starling.display.DisplayObjectContainer;
     import starling.display.MovieClip;
     import starling.display.Sprite;
     import starling.textures.TextureAtlas;
@@ -48,7 +49,7 @@ package niso.world.objects {
         public function setAtlas(pAtlas:TextureAtlas,
                                  pPivotX:Number, pPivotY:Number,
                                  pFrameRate:int,
-                                 pAnimation:String):void {
+                                 pAnimation:String = null):void {
             _atlas = pAtlas;
 
             _pivotX = pPivotX;
@@ -56,7 +57,9 @@ package niso.world.objects {
 
             _frameRate = pFrameRate;
 
-            gotoAndPlay(pAnimation);
+            if (pAnimation) {
+                gotoAndPlay(pAnimation);
+            }
         };
 
         public function gotoAndPlay(pAnimation:String, pFlip:Boolean = false):void {
@@ -86,7 +89,7 @@ package niso.world.objects {
             Starling.juggler.add(_movie);
         };
 
-        override protected function init():DisplayObject {
+        override protected function init():DisplayObjectContainer {
             _view = new Sprite();
 
             return _view;

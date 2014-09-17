@@ -27,6 +27,8 @@ package niso.world.objects.builtin {
 		private var _route:Vector.<Node>;
 
         private var _currentTween:Tween;
+
+        private var _object:IPlayable;
 		
 		public function Character() {
 			super();
@@ -42,12 +44,14 @@ package niso.world.objects.builtin {
 
         override public function poolPrepare():void {
             haltMoving();
-
             super.poolPrepare();
         };
 
 		override public function setObject(pObject:IsometricDisplayObject):void {
 			super.setObject(pObject);
+
+            _object = pObject as IPlayable;
+            _object.gotoAndPlay('idle');
 		};
 		
 		public function moveTo(pDestinationX:int, pDestinationZ:int):void {
@@ -108,7 +112,7 @@ package niso.world.objects.builtin {
                 var direction:Direction = _directions.getDirection(object.isometricPosition, destination);
 
                 if (direction) {
-                    (object as IPlayable).gotoAndPlay(direction.id + '_walk', direction.flip);
+                    _object.gotoAndPlay(direction.id + '_walk', direction.flip);
                 }
 
                 _currentTween = new Tween(object, distance / moveSpeed);
@@ -126,7 +130,7 @@ package niso.world.objects.builtin {
 				_moving = false;
 				_route  = null;
 
-                (object as IPlayable).gotoAndPlay('idle_state_0');
+                _object.gotoAndPlay('idle');
 				
 				dispatchEventWith(MOVE_COMPLETE, false, object);
 			}

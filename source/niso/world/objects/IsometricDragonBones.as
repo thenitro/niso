@@ -6,6 +6,7 @@ package niso.world.objects {
     import niso.world.objects.abstract.IPlayable;
 
     import starling.display.DisplayObject;
+    import starling.display.DisplayObjectContainer;
     import starling.display.Sprite;
 
     public class IsometricDragonBones extends IsometricDisplayObject implements IPlayable {
@@ -64,7 +65,7 @@ package niso.world.objects {
             _sprite.scaleX = pFlip ? -1 : 1;
         };
 
-        override protected function init():DisplayObject {
+        override protected function init():DisplayObjectContainer {
             _view = new Sprite();
 
             return _view;

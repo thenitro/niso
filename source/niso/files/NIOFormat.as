@@ -51,7 +51,7 @@ package niso.files {
             return _offsetY;
         };
 
-        public function isAtlas():Boolean {
+        public function get isAtlas():Boolean {
             return _isAtlas;
         };
 

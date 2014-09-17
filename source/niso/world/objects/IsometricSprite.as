@@ -1,6 +1,7 @@
 package niso.world.objects {
 	import starling.display.DisplayObject;
-	import starling.display.Image;
+    import starling.display.DisplayObjectContainer;
+    import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
 	import starling.textures.TextureSmoothing;
@@ -41,7 +42,7 @@ package niso.world.objects {
 			_view.addChild(image);
 		};
 		
-		override protected function init():DisplayObject {
+		override protected function init():DisplayObjectContainer {
 			_view = new Sprite();
 			
 			return _view;

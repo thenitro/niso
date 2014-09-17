@@ -179,7 +179,11 @@ package niso.world {
         private function addedToStageEventHandler(pEvent:Event):void {
             _canvas.removeEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
 
-            Starling.juggler.repeatCall(sortAll, 0.1);
+            _canvas.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+        };
+
+        private function enterFrameEventHandler(pEvent:Event):void {
+            sortAll();
         };
 
 		private function sortAll():void {
