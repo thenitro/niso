@@ -1,12 +1,11 @@
 package niso.world.objects {
-	import starling.display.DisplayObject;
     import starling.display.DisplayObjectContainer;
     import starling.display.Image;
-	import starling.display.Sprite;
-	import starling.textures.Texture;
-	import starling.textures.TextureSmoothing;
+    import starling.display.Sprite;
+    import starling.textures.Texture;
+    import starling.textures.TextureSmoothing;
 
-	public final class IsometricSprite extends IsometricDisplayObject {
+    public final class IsometricSprite extends IsometricDisplayObject {
 		private var _view:Sprite;
 		
 		public function IsometricSprite() {

@@ -4,6 +4,7 @@ package niso.world.objects.builtin {
     import niso.world.objects.IsometricBehavior;
     import niso.world.objects.IsometricDisplayObject;
     import niso.world.objects.abstract.IPlayable;
+    import niso.world.objects.builtin.task.TaskController;
 
     import nmath.vectors.TVector3D;
 
@@ -29,6 +30,8 @@ package niso.world.objects.builtin {
         private var _currentTween:Tween;
 
         private var _object:IPlayable;
+
+        private var _tasks:TaskController;
 		
 		public function Character() {
 			super();
@@ -42,9 +45,24 @@ package niso.world.objects.builtin {
 			return _moving;
 		};
 
+        public function get tasks():TaskController {
+            return _tasks;
+        };
+
         override public function poolPrepare():void {
+            _pool.put(_tasks);
+            _tasks = null;
+
             haltMoving();
             super.poolPrepare();
+        };
+
+        override public function dispose():void {
+            _pool.put(_tasks);
+            _tasks = null;
+
+            haltMoving();
+            super.dispose();
         };
 
 		override public function setObject(pObject:IsometricDisplayObject):void {
@@ -52,6 +70,8 @@ package niso.world.objects.builtin {
 
             _object = pObject as IPlayable;
             _object.gotoAndPlay('idle');
+
+            _tasks = TaskController.NEW;
 		};
 		
 		public function moveTo(pDestinationX:int, pDestinationZ:int):void {

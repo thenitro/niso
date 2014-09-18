@@ -1,11 +1,17 @@
 package niso.world.controllers {
     import flash.geom.Point;
+    import flash.utils.Dictionary;
 
     import niso.world.IsometricWorld;
+    import niso.world.objects.IsometricDisplayObject;
+    import niso.world.objects.IsometricDisplayObject;
+    import niso.world.objects.IsometricSprite;
 
     import nmath.vectors.Vector2D;
 
     import npooling.Pool;
+
+    import starling.display.DisplayObject;
 
     import starling.events.EventDispatcher;
     import starling.events.Touch;
@@ -13,10 +19,12 @@ package niso.world.controllers {
     import starling.events.TouchPhase;
 
     public class WorldTouchController extends EventDispatcher {
-        public static const TOUCH_EVENT:String     = 'touch_event';
-        public static const MOVE_EVENT:String      = 'move_event';
-        public static const ZOOM_EVENT:String      = 'zoom_event';
-        public static const EVENT_COMPLETED:String = 'completed';
+        public static const INTERACT:String = 'interact';
+
+        public static const TOUCH_EVENT:String = 'touch_event';
+        public static const MOVE_EVENT:String  = 'move_event';
+        public static const ZOOM_EVENT:String  = 'zoom_event';
+        public static const COMPLETED:String   = 'completed';
 
         private static var _pool:Pool = Pool.getInstance();
 
@@ -46,6 +54,29 @@ package niso.world.controllers {
         };
 
         private function layerTouchEventHandler(pEvent:TouchEvent):void {
+            var objects:Dictionary = _world.getLayerByID(2).objects;
+
+            for (var object:DisplayObject in objects) {
+                var touch:Touch = pEvent.getTouch(object);
+
+                if (!touch) {
+                    continue;
+                }
+
+                var isometric:IsometricDisplayObject = objects[object] as IsometricDisplayObject;
+                if (!isometric) {
+                    continue;
+                }
+
+                if (touch.phase == TouchPhase.ENDED) {
+                    if (_calc.lengthSquared() < 10) {
+                        dispatchEventWith(INTERACT, false, isometric);
+                    }
+
+                    return;
+                }
+            }
+
             if (pEvent.touches.length == 1) {
                 processTapOrPan(pEvent.getTouch(_world.canvas));
                 return;
@@ -80,7 +111,7 @@ package niso.world.controllers {
 
                 if (pEvent.touches[0].phase == TouchPhase.ENDED ||
                     pEvent.touches[1].phase == TouchPhase.ENDED) {
-                    dispatchEventWith(EVENT_COMPLETED);
+                    dispatchEventWith(COMPLETED);
                     return;
                 }
             }
@@ -121,7 +152,7 @@ package niso.world.controllers {
                 if (_calc.lengthSquared() < 10) {
                     dispatchEventWith(TOUCH_EVENT, false, _start);
                 } else {
-                    dispatchEventWith(EVENT_COMPLETED, false, offset);
+                    dispatchEventWith(COMPLETED, false, offset);
                 }
             }
         };
