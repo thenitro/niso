@@ -1,10 +1,11 @@
 package niso.world.objects.builtin.task.tasks {
+    import niso.world.objects.builtin.task.*;
+    import niso.world.objects.builtin.task.tasks.*;
     import flash.events.TimerEvent;
     import flash.utils.Timer;
 
     import niso.world.objects.abstract.IPlayable;
     import niso.world.objects.builtin.Character;
-    import niso.world.objects.builtin.task.tasks.InteractTask;
     import niso.world.objects.builtin.task.Task;
 
     import nmath.Random;
@@ -12,20 +13,20 @@ package niso.world.objects.builtin.task.tasks {
     import npathfinding.base.Node;
     import npathfinding.base.Pathfinder;
 
-    public class IdleTask extends Task {
-        public static const STATE_ID:int = 1;
+    public class InteractTask extends Task {
+        public static const STATE_ID:int = 3;
 
         private static var _pathfinder:Pathfinder = Pathfinder.getInstance();
 
         private var _timer:Timer;
         private var _object:IPlayable;
 
-        public function IdleTask() {
+        public function InteractTask() {
             super(STATE_ID);
         };
 
         override public function get reflection():Class {
-            return IdleTask;
+            return InteractTask;
         };
 
         override public function init(pBehavior:Character):void {
@@ -40,7 +41,7 @@ package niso.world.objects.builtin.task.tasks {
         override public function execute():void {
             startTimer();
 
-            _object.gotoAndPlay('idle');
+            _object.gotoAndPlay('interact');
         };
 
         override public function cancel():void {
@@ -66,35 +67,7 @@ package niso.world.objects.builtin.task.tasks {
 
         private function timerCompleteEventHandler(pEvent:TimerEvent):void {
             stopTimer();
-            findPath();
             executed();
-        };
-
-        private function findPath():void {
-            var destination:Node = Random.arrayElement(_pathfinder.freeNodes.list);
-
-            var path:Vector.<Node> = _pathfinder.findPath(behavior.object.x,
-                                                          behavior.object.z,
-                                                          destination.indexX,
-                                                          destination.indexY,
-                                                          behavior.heuristic);
-
-            var walkTask:WalkTask = new WalkTask();
-                walkTask.path        = path;
-                walkTask.destination = destination;
-                walkTask.init(behavior);
-
-            behavior.tasks.addTask(walkTask);
-
-            /*var actionTask:ActionTask = new ActionTask();
-                actionTask.init(behavior);
-
-            behavior.tasks.addTask(actionTask);*/
-
-            var idleTask:IdleTask = new IdleTask();
-                idleTask.init(behavior);
-
-            behavior.tasks.addTask(idleTask);
         };
     }
 }

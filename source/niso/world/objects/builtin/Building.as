@@ -106,12 +106,7 @@ package niso.world.objects.builtin {
                                           buildingStateStopEventHandler);
 
             removeBubble();
-
-            trace('Building.buildingStateStopEventHandler:', _bubble, _object.view.numChildren, _object.view.height);
-
             startState(_states[state.nextState]);
-
-            trace('Building.buildingStateStopEventHandler:', _bubble);
         };
     };
 }

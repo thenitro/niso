@@ -40,6 +40,8 @@ package niso.world.controllers {
         };
 
         public function update():void {
+            return;
+
             _threader.purge();
 
             for each (var layerID:int in _layers) {

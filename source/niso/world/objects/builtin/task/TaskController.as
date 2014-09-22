@@ -1,4 +1,6 @@
 package niso.world.objects.builtin.task {
+    import flash.errors.IllegalOperationError;
+
     import npooling.IReusable;
     import npooling.Pool;
 
@@ -70,15 +72,14 @@ package niso.world.objects.builtin.task {
                 if (pTask.condition.check()) {
                     purge();
                     startTask(pTask);
+                    return;
                 }
-            } else {
-                if (_currentTask) {
-                    _schedule.push(pTask);
-                } else {
-                    if (pTask.condition.check()) {
-                        startTask(pTask);
-                    }
-                }
+            }
+
+            _schedule.push(pTask);
+
+            if (!_currentTask) {
+               startNextTask();
             }
 		};
 
@@ -97,7 +98,8 @@ package niso.world.objects.builtin.task {
                 return;
             }
 
-            trace('TaskController.startTask:', pTask);
+            trace('TaskController.startTask:', pTask, pTask.behavior.object.id);
+
 
             _state = pTask.state;
 
@@ -105,13 +107,19 @@ package niso.world.objects.builtin.task {
             _currentTask.addEventListener(Event.COMPLETE, taskCompleteEventHandler);
             _currentTask.addEventListener(Event.CANCEL,   taskCanceledEventHandler);
 
-            _threader.addThread(_currentTask.execute);
+            _currentTask.execute();
+
+            //_threader.addThread(_currentTask.execute);
         };
 
         private function startNextTask():void {
             _currentTask = null;
 
-            startTask(_schedule.shift());
+            var task:Task = _schedule.shift();
+
+            if (task && task.condition.check()) {
+                startTask(task);
+            }
         };
 		
 		private function purge():void {

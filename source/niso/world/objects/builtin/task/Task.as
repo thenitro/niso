@@ -1,5 +1,4 @@
 package niso.world.objects.builtin.task {
-    import niso.world.objects.IsometricBehavior;
     import niso.world.objects.builtin.Character;
 
     import npooling.IReusable;

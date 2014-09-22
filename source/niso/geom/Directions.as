@@ -114,11 +114,14 @@ package niso.geom {
 
         public function getDirection(pStart:TVector3D,
                                      pDestination:TVector3D):Direction {
-            var angle:Number = getAngle(pStart, pDestination);
+            var angle:Number        = getAngle(pStart, pDestination);
+            var direction:Direction = _directions[angle] as Direction;
 
-            //trace('Directions.getDirection:', angle);
+            if (!direction) {
+                trace('Directions.getDirection: cannot find for angle', angle);
+            }
 
-            return _directions[angle];
+            return direction;
         };
 
         private function getAngle(pVectorA:TVector3D,

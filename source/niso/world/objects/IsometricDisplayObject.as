@@ -19,7 +19,7 @@ package niso.world.objects {
 		private var _screenPosition:Vector2D;
 		private var _isometricPosition:TVector3D;
 		
-		private var _id:uint;
+		private var _id:uint = Math.random() * 10000000;
 		
 		private var _layer:IsometricLayer;
 
