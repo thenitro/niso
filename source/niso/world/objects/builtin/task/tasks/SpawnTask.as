@@ -24,7 +24,7 @@ package niso.world.objects.builtin.task.tasks {
         override public function init(pBehavior:Character):void {
             super.init(pBehavior);
 
-            _condition = new SpawnCondition();
+            _condition = _pool.get(SpawnCondition) as SpawnCondition;
             _condition.init(this);
         };
 

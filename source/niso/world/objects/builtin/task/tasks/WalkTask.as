@@ -1,6 +1,4 @@
 package niso.world.objects.builtin.task.tasks {
-    import dragonBones.Bone;
-
     import niso.geom.Direction;
     import niso.geom.Directions;
     import niso.world.objects.abstract.IPlayable;
@@ -43,17 +41,29 @@ package niso.world.objects.builtin.task.tasks {
         override public function poolPrepare():void {
             super.poolPrepare();
             removeTween();
+
+            path = null;
+            destination = null;
+
+            _object = null;
+            _next   = null;
         };
 
         override public function dispose():void {
             super.dispose();
             removeTween();
+
+            path = null;
+            destination = null;
+
+            _object = null;
+            _next   = null;
         };
 
         override public function init(pBehavior:Character):void {
             super.init(pBehavior);
 
-            _condition = new WalkCondition();
+            _condition = _pool.get(WalkCondition) as WalkCondition;
             _condition.init(this);
 
             _object = pBehavior.object as IPlayable;

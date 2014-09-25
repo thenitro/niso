@@ -30,17 +30,21 @@ package niso.world.objects.builtin.task.tasks {
         override public function poolPrepare():void {
             super.poolPrepare();
             stopTimer();
+
+            _object = null;
         };
 
         override public function dispose():void {
             super.dispose();
             stopTimer();
+
+            _object = null;
         };
 
         override public function init(pBehavior:Character):void {
             super.init(pBehavior);
 
-            _condition = new IdleCondition();
+            _condition = _pool.get(IdleCondition) as IdleCondition;
             _condition.init(this);
 
             _object = pBehavior.object as IPlayable;
@@ -88,14 +92,14 @@ package niso.world.objects.builtin.task.tasks {
                                                           destination.indexY,
                                                           behavior.heuristic);
 
-            var walkTask:WalkTask = new WalkTask();
+            var walkTask:WalkTask = _pool.get(WalkTask) as WalkTask;
                 walkTask.path        = path;
                 walkTask.destination = destination;
                 walkTask.init(behavior);
 
             behavior.tasks.addTask(walkTask);
 
-            var idleTask:IdleTask = new IdleTask();
+            var idleTask:IdleTask = _pool.get(IdleTask) as IdleTask;
                 idleTask.init(behavior);
 
             behavior.tasks.addTask(idleTask);

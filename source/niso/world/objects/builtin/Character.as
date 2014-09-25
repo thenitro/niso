@@ -33,8 +33,6 @@ package niso.world.objects.builtin {
         };
 
         override public function dispose():void {
-            trace('Character.dispose:');
-
             _pool.put(_tasks);
             _tasks = null;
 

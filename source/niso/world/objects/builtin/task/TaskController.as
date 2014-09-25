@@ -87,18 +87,20 @@ package niso.world.objects.builtin.task {
             _schedule.length = 0;
 
             if (_currentTask) {
+                _threader.removeThread(_currentTask.execute);
+
                 _currentTask.removeEventListener(Event.COMPLETE, taskCompleteEventHandler);
                 _currentTask.cancel();
             }
         };
 
         public function poolPrepare():void {
-            cleanUpTask();
+            poolCurrentTask();
             purge();
         };
 
         public function dispose():void {
-            cleanUpTask();
+            poolCurrentTask();
             purge();
 
             _schedule = null;
@@ -114,10 +116,11 @@ package niso.world.objects.builtin.task {
             _currentTask = pTask;
             _currentTask.addEventListener(Event.COMPLETE, taskCompleteEventHandler);
             _currentTask.addEventListener(Event.CANCEL,   taskCanceledEventHandler);
+            _currentTask.addEventListener(Event.REMOVED,  taskRemovedEventHandler);
 
-            _currentTask.execute();
+            //_currentTask.execute();
 
-            //_threader.addThread(_currentTask.execute);
+            _threader.addThread(_currentTask.execute);
         };
 
         private function startNextTask():void {
@@ -128,7 +131,7 @@ package niso.world.objects.builtin.task {
             }
         };
 
-        private function cleanUpTask():void {
+        private function poolCurrentTask():void {
             _pool.put(_currentTask);
             _currentTask = null;
         };
@@ -147,6 +150,10 @@ package niso.world.objects.builtin.task {
             _currentTask = null;
 
             startNextTask();
+        };
+
+        private function taskRemovedEventHandler(pEvent:Event):void {
+            _pool.put(pEvent.target as Task);
         };
 	};
 }

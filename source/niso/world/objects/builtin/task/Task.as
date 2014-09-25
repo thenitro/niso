@@ -2,14 +2,17 @@ package niso.world.objects.builtin.task {
     import niso.world.objects.builtin.Character;
 
     import npooling.IReusable;
+    import npooling.Pool;
 
     import starling.events.Event;
     import starling.events.EventDispatcher;
 
     public class Task extends EventDispatcher implements IReusable {
-        private var _disposed:Boolean;
+        protected static var _pool:Pool = Pool.getInstance();
 
         protected var _condition:TaskCondition;
+
+        private var _disposed:Boolean;
 
         private var _state:int;
         private var _behavior:Character;
@@ -58,22 +61,28 @@ package niso.world.objects.builtin.task {
 
         protected function canceled():void {
             dispatchEventWith(Event.CANCEL);
+            dispatchEventWith(Event.REMOVED);
         };
 
         protected function executed():void {
             dispatchEventWith(Event.COMPLETE);
+            dispatchEventWith(Event.REMOVED);
         };
 
         public function poolPrepare():void {
-            removeEventListeners();
-            cancel();
-
-            _behavior = null;
+            clean();
         };
 
         public function dispose():void {
+            clean();
+        };
+
+        private function clean():void {
             removeEventListeners();
             cancel();
+
+            _pool.put(_condition);
+            _condition = null;
 
             _behavior = null;
         };

@@ -22,10 +22,24 @@ package niso.world.objects.builtin.task.tasks {
             return InteractTask;
         };
 
+        override public function poolPrepare():void {
+            super.poolPrepare();
+
+            _object.removeEventListener(PlayableEvents.COMPLETE, playableCompleteEventHandler);
+            _object = null;
+        };
+
+        override public function dispose():void {
+            super.dispose();
+
+            _object.removeEventListener(PlayableEvents.COMPLETE, playableCompleteEventHandler);
+            _object = null;
+        };
+
         override public function init(pBehavior:Character):void {
             super.init(pBehavior);
 
-            _condition = new InteractCondition();
+            _condition = _pool.get(InteractCondition) as InteractCondition;
             _condition.init(this);
 
             _object = pBehavior.object as IPlayable;
