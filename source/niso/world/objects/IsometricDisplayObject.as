@@ -1,5 +1,6 @@
 package niso.world.objects {
     import niso.world.layers.IsometricLayer;
+    import niso.world.objects.builtin.Character;
 
     import nmath.vectors.TVector3D;
     import nmath.vectors.Vector2D;
@@ -76,18 +77,18 @@ package niso.world.objects {
 		public function get y():Number {
 			return _isometricPosition.y;
 		};
-		
+
 		public function set z(pValue:Number):void {
 			_isometricPosition.z = pValue;
 		};
-		
+
 		public function get z():Number {
 			return _isometricPosition.z;
 		};
-		
+
 		public function set alpha(pValue:Number):void {
 			_alpha = pValue;
-			
+
 			if (_view) {
 				_view.alpha = _alpha;
 			}
@@ -135,9 +136,9 @@ package niso.world.objects {
 		};
 		
 		public function updateScreenPosition():void {
-			if (!_layer || !_layer.world || !_layer.world.geometry) {
+			/* if (!_layer || !_layer.world || !_layer.world.geometry) {
 				return;
-			}
+			} */
 			
 			_layer.world.geometry.isometricToScreen(_isometricPosition, _screenPosition);
 			
@@ -155,8 +156,7 @@ package niso.world.objects {
             _screenPosition.zero();
             _isometricPosition.zero();
 
-            _pool.put(_behavior);
-            _behavior = null;
+            removeBehavoir();
 
             _layer = null;
 		};
@@ -179,6 +179,15 @@ package niso.world.objects {
 		protected function init():DisplayObjectContainer {
 			return null;
 		};
+
+        protected function removeBehavoir():void {
+            if (behavior is Character) {
+                trace('IsometricDisplayObject.removeBehavoir:');
+            }
+
+            _pool.put(_behavior);
+            _behavior = null;
+        };
 
         private function viewAddedToStageEventHandler(pEvent:Event):void {
             var target:DisplayObject = pEvent.target as DisplayObject;

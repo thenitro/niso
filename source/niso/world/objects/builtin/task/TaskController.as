@@ -80,22 +80,25 @@ package niso.world.objects.builtin.task {
 		};
 
         public function purge():void {
-            if (_currentTask) {
-                _currentTask.cancel();
-            }
-
             for each (var task:Task in _schedule) {
                 _pool.put(task);
             }
 
             _schedule.length = 0;
+
+            if (_currentTask) {
+                _currentTask.removeEventListener(Event.COMPLETE, taskCompleteEventHandler);
+                _currentTask.cancel();
+            }
         };
 
         public function poolPrepare():void {
+            cleanUpTask();
             purge();
         };
 
         public function dispose():void {
+            cleanUpTask();
             purge();
 
             _schedule = null;
@@ -105,8 +108,6 @@ package niso.world.objects.builtin.task {
             if (!pTask) {
                 return;
             }
-
-            trace('TaskController.startTask:', pTask);
 
             _state = pTask.state;
 
@@ -127,17 +128,22 @@ package niso.world.objects.builtin.task {
             }
         };
 
-        private function taskCompleteEventHandler(pEvent:Event):void {
-            trace('TaskController.taskCompleteEventHandler:', pEvent.data);
+        private function cleanUpTask():void {
+            _pool.put(_currentTask);
+            _currentTask = null;
+        };
 
+        private function taskCompleteEventHandler(pEvent:Event):void {
+            _currentTask.removeEventListener(Event.COMPLETE, taskCompleteEventHandler);
+            _currentTask.removeEventListener(Event.CANCEL,   taskCanceledEventHandler);
             _currentTask = null;
 
             startNextTask();
         };
 
         private function taskCanceledEventHandler(pEvent:Event):void {
-            trace('TaskController.taskCanceledEventHandler:', pEvent.data);
-
+            _currentTask.removeEventListener(Event.COMPLETE, taskCompleteEventHandler);
+            _currentTask.removeEventListener(Event.CANCEL,   taskCanceledEventHandler);
             _currentTask = null;
 
             startNextTask();

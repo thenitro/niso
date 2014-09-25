@@ -6,10 +6,8 @@ package niso.world.objects {
 
     import niso.world.objects.abstract.IPlayable;
 
-    import starling.display.DisplayObject;
     import starling.display.DisplayObjectContainer;
     import starling.display.Sprite;
-    import starling.events.Event;
 
     public class IsometricDragonBones extends IsometricDisplayObject implements IPlayable {
         private var _view:Sprite;
@@ -39,7 +37,9 @@ package niso.world.objects {
         };
 
         override public function poolPrepare():void {
+            removeBehavoir();
             clean();
+
             super.poolPrepare();
         };
 
@@ -80,11 +80,19 @@ package niso.world.objects {
 
             _animation = null;
 
-            _armature = null;
+            if (_armature) {
+                _armature.removeEventListener(AnimationEvent.COMPLETE, animationEventCompleteEventHandler);
+                _armature = null;
+            }
+
             _sprite   = null;
         };
 
         private function animationEventCompleteEventHandler(pEvent:AnimationEvent):void {
+            if (!_armature) {
+                return;
+            }
+
             _armature.removeEventListener(AnimationEvent.COMPLETE, animationEventCompleteEventHandler);
 
             dispatchEventWith(PlayableEvents.COMPLETE);

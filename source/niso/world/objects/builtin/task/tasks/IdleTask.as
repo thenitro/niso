@@ -27,6 +27,16 @@ package niso.world.objects.builtin.task.tasks {
             return IdleTask;
         };
 
+        override public function poolPrepare():void {
+            super.poolPrepare();
+            stopTimer();
+        };
+
+        override public function dispose():void {
+            super.dispose();
+            stopTimer();
+        };
+
         override public function init(pBehavior:Character):void {
             super.init(pBehavior);
 

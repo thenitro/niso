@@ -40,6 +40,16 @@ package niso.world.objects.builtin.task.tasks {
             return WalkTask;
         };
 
+        override public function poolPrepare():void {
+            super.poolPrepare();
+            removeTween();
+        };
+
+        override public function dispose():void {
+            super.dispose();
+            removeTween();
+        };
+
         override public function init(pBehavior:Character):void {
             super.init(pBehavior);
 
@@ -71,8 +81,16 @@ package niso.world.objects.builtin.task.tasks {
                     destination.x = _next.indexX;
                     destination.z = _next.indexY;
 
-                var distance:Number     = behavior.object.isometricPosition.distanceTo(destination);
-                var direction:Direction = _directions.getDirection(behavior.object.isometricPosition, destination);
+                var position:TVector3D = behavior.object.isometricPosition;
+
+                if (!position) {
+                    cancel();
+                    nextPoint();
+                    return;
+                }
+
+                var distance:Number     =  position.distanceTo(destination);
+                var direction:Direction = _directions.getDirection(position, destination);
 
                 if (direction) {
                     _object.gotoAndPlay(direction.id + '_walk', direction.flip);

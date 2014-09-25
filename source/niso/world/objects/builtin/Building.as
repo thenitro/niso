@@ -20,7 +20,7 @@ package niso.world.objects.builtin {
         };
 
         override public function get reflection():Class {
-            return Obstacle;
+            return Building;
         };
 
         public function get currentState():ProcessingState {
@@ -107,6 +107,10 @@ package niso.world.objects.builtin {
         };
 
         private function removeBubble():void {
+            if (!_object || !_bubble) {
+                return;
+            }
+
             _object.view.removeChild(_bubble);
             _pool.put(_bubble);
 
