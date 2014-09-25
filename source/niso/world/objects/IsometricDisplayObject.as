@@ -10,8 +10,9 @@ package niso.world.objects {
     import starling.display.DisplayObject;
     import starling.display.DisplayObjectContainer;
     import starling.events.Event;
+    import starling.events.EventDispatcher;
 
-    public class IsometricDisplayObject implements IReusable {
+    public class IsometricDisplayObject extends EventDispatcher implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();
 
         private var _disposed:Boolean;

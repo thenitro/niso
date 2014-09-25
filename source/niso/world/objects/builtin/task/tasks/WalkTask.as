@@ -1,4 +1,6 @@
 package niso.world.objects.builtin.task.tasks {
+    import dragonBones.Bone;
+
     import niso.geom.Direction;
     import niso.geom.Directions;
     import niso.world.objects.abstract.IPlayable;
@@ -28,6 +30,8 @@ package niso.world.objects.builtin.task.tasks {
 
         private var _next:Node;
 
+        private var _canceled:Boolean;
+
         public function WalkTask() {
             super(STATE_ID);
         };
@@ -51,13 +55,9 @@ package niso.world.objects.builtin.task.tasks {
         };
 
         override public function cancel():void {
-            path = null;
-            destination = null;
+            _canceled = true;
 
-            _next = null;
-
-            removeTween();
-            canceled();
+            path.length = 0;
         };
 
         private function nextPoint():void {
@@ -92,11 +92,16 @@ package niso.world.objects.builtin.task.tasks {
 
                 _pool.put(destination);
             } else {
+                if (_canceled) {
+                    canceled();
+                } else {
+                    executed();
+                }
+
                 path = null;
+                destination = null;
 
                 _next = null;
-
-                executed();
             }
         };
 

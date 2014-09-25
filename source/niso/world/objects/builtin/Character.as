@@ -6,8 +6,6 @@ package niso.world.objects.builtin {
     import npathfinding.base.Heuristic;
 
     public class Character extends IsometricBehavior {
-		public static const MOVE_COMPLETE:String = 'move_complete_event';
-
         public var moveSpeed:Number   = 2.0;
         public var heuristic:Function = Heuristic.manhattan;
 

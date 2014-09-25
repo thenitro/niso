@@ -1,13 +1,10 @@
 package niso.world.objects.builtin.task {
-    import flash.errors.IllegalOperationError;
-
     import npooling.IReusable;
     import npooling.Pool;
 
     import nthread.Threader;
 
     import starling.core.Starling;
-
     import starling.events.Event;
 
     public class TaskController implements IReusable {
@@ -40,8 +37,6 @@ package niso.world.objects.builtin.task {
         };
 
         private static function createThreader():Threader {
-            trace('NPC.createThreader:');
-
             _threader = new Threader();
             _threader.init(1, 2);
 
@@ -71,7 +66,8 @@ package niso.world.objects.builtin.task {
             if (pTask.condition.type == TaskCondition.TYPE_INTERRUPT) {
                 if (pTask.condition.check()) {
                     purge();
-                    startTask(pTask);
+
+                    _schedule.push(pTask);
                     return;
                 }
             }
@@ -82,6 +78,18 @@ package niso.world.objects.builtin.task {
                startNextTask();
             }
 		};
+
+        public function purge():void {
+            if (_currentTask) {
+                _currentTask.cancel();
+            }
+
+            for each (var task:Task in _schedule) {
+                _pool.put(task);
+            }
+
+            _schedule.length = 0;
+        };
 
         public function poolPrepare():void {
             purge();
@@ -98,8 +106,7 @@ package niso.world.objects.builtin.task {
                 return;
             }
 
-            trace('TaskController.startTask:', pTask, pTask.behavior.object.id);
-
+            trace('TaskController.startTask:', pTask);
 
             _state = pTask.state;
 
@@ -113,33 +120,26 @@ package niso.world.objects.builtin.task {
         };
 
         private function startNextTask():void {
-            _currentTask = null;
-
             var task:Task = _schedule.shift();
 
             if (task && task.condition.check()) {
                 startTask(task);
             }
         };
-		
-		private function purge():void {
-            if (_currentTask) {
-                _currentTask.cancel();
-                _currentTask = null;
-            }
-
-            for each (var task:Task in _schedule) {
-                _pool.put(task);
-            }
-
-            _schedule.length = 0;
-        };
 
         private function taskCompleteEventHandler(pEvent:Event):void {
+            trace('TaskController.taskCompleteEventHandler:', pEvent.data);
+
+            _currentTask = null;
+
             startNextTask();
         };
 
         private function taskCanceledEventHandler(pEvent:Event):void {
+            trace('TaskController.taskCanceledEventHandler:', pEvent.data);
+
+            _currentTask = null;
+
             startNextTask();
         };
 	};

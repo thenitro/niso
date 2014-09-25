@@ -4,7 +4,6 @@ package niso.world.objects.builtin.task.tasks {
 
     import niso.world.objects.abstract.IPlayable;
     import niso.world.objects.builtin.Character;
-    import niso.world.objects.builtin.task.tasks.InteractTask;
     import niso.world.objects.builtin.task.Task;
 
     import nmath.Random;
@@ -85,11 +84,6 @@ package niso.world.objects.builtin.task.tasks {
                 walkTask.init(behavior);
 
             behavior.tasks.addTask(walkTask);
-
-            /*var actionTask:ActionTask = new ActionTask();
-                actionTask.init(behavior);
-
-            behavior.tasks.addTask(actionTask);*/
 
             var idleTask:IdleTask = new IdleTask();
                 idleTask.init(behavior);

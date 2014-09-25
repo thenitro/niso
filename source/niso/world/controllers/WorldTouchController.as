@@ -4,15 +4,12 @@ package niso.world.controllers {
 
     import niso.world.IsometricWorld;
     import niso.world.objects.IsometricDisplayObject;
-    import niso.world.objects.IsometricDisplayObject;
-    import niso.world.objects.IsometricSprite;
 
     import nmath.vectors.Vector2D;
 
     import npooling.Pool;
 
     import starling.display.DisplayObject;
-
     import starling.events.EventDispatcher;
     import starling.events.Touch;
     import starling.events.TouchEvent;

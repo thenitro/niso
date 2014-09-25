@@ -66,12 +66,14 @@ package niso.world.objects.builtin.task {
 
         public function poolPrepare():void {
             removeEventListeners();
+            cancel();
 
             _behavior = null;
         };
 
         public function dispose():void {
             removeEventListeners();
+            cancel();
 
             _behavior = null;
         };

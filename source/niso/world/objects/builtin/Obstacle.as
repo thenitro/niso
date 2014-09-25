@@ -5,7 +5,7 @@ package niso.world.objects.builtin {
     import npathfinding.base.Pathfinder;
 
     public class Obstacle extends IsometricBehavior {
-		private static var _pathfinder:Pathfinder = Pathfinder.getInstance();
+		protected static var _pathfinder:Pathfinder = Pathfinder.getInstance();
 
         private var _sizeX:int;
         private var _sizeZ:int;
@@ -17,6 +17,14 @@ package niso.world.objects.builtin {
 		override public function get reflection():Class {
 			return Obstacle;
 		};
+
+        public function get sizeX():int {
+            return _sizeX;
+        };
+
+        public function get sizeZ():int {
+            return _sizeZ;
+        };
 
         override public function poolPrepare():void {
             setState(_pathfinder.setWalkable);
