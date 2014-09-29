@@ -1,6 +1,5 @@
 package niso.world.objects {
     import niso.world.layers.IsometricLayer;
-    import niso.world.objects.builtin.Character;
 
     import nmath.vectors.TVector3D;
     import nmath.vectors.Vector2D;
@@ -136,9 +135,9 @@ package niso.world.objects {
 		};
 		
 		public function updateScreenPosition():void {
-			/* if (!_layer || !_layer.world || !_layer.world.geometry) {
+			if (!_layer || !_layer.world || !_layer.world.geometry) {
 				return;
-			} */
+			}
 			
 			_layer.world.geometry.isometricToScreen(_isometricPosition, _screenPosition);
 			
@@ -181,10 +180,6 @@ package niso.world.objects {
 		};
 
         protected function removeBehavoir():void {
-            if (behavior is Character) {
-                trace('IsometricDisplayObject.removeBehavoir:');
-            }
-
             _pool.put(_behavior);
             _behavior = null;
         };

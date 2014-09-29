@@ -52,8 +52,8 @@ package niso.world.objects.builtin.processing.bubbles {
         private function addedToStageEventHandler(pEvent:Event):void {
             removeEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
 
-            var backgroundTexture:Texture = _library.getByID('super_timer_back').content as Texture;
-            var foregroundTexture:Texture = _library.getByID('super_timer').content as Texture;
+            var backgroundTexture:Texture = _library.get('super_timer_back').content as Texture;
+            var foregroundTexture:Texture = _library.get('super_timer').content as Texture;
 
             _background = addChild(new Image(backgroundTexture)) as Image;
 

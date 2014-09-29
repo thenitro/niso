@@ -11,6 +11,8 @@ package niso.world.objects {
 		private var _object:IsometricDisplayObject;
 
         private var _visible:Boolean;
+
+        private var _y:Number = 0;
 		
 		public function IsometricBehavior() {
 			super();
@@ -35,9 +37,20 @@ package niso.world.objects {
         public function set visible(pValue:Boolean):void {
             _visible = pValue;
         };
+
+        public function set y(pValue:Number):void {
+            if (_object) {
+                _object.y = pValue;
+                _object.updateScreenPosition();
+            }
+
+            _y = pValue;
+        };
 		
 		public function setObject(pObject:IsometricDisplayObject):void {
 			_object = pObject;
+            _object.y = _y;
+            _object.updateScreenPosition();
 		};
 		
 		public function poolPrepare():void {

@@ -128,8 +128,6 @@ package niso.tiled {
         };
 		
 		private function parseLayer(pData:XML, pLayerID:uint):void {
-            trace('TiledLoader.parseLayer:');
-
             _index.zero();
 
 			var layer:IsometricLayer = IsometricLayer.NEW;
@@ -164,8 +162,6 @@ package niso.tiled {
         };
 		
 		private function parseObjectGroup(pData:XML, pLayerID:uint):void {
-            trace('TiledLoader.parseObjectGroup:', pLayerID);
-
 			var layer:IsometricLayer = IsometricLayer.NEW;
 				layer.init(pLayerID, false, IsometricLayerSortingType.ALWAYS);
 			

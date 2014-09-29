@@ -38,8 +38,6 @@ package niso.tiled {
         };
 
         public function createObject(pObjectAbstract:XML):IsometricDisplayObject {
-            return null;
-
             var object:IsometricSprite = _pool.get(IsometricSprite) as IsometricSprite;
 
             if (!object) {

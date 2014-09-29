@@ -47,6 +47,8 @@ package niso.world.objects.builtin.task.tasks {
 
             _object = null;
             _next   = null;
+
+            _canceled = false;
         };
 
         override public function dispose():void {

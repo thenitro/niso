@@ -14,7 +14,6 @@ package niso.world.objects.builtin {
 
     import nmath.vectors.Vector2D;
 
-    import starling.display.BlendMode;
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
     import starling.events.Event;
@@ -50,19 +49,20 @@ package niso.world.objects.builtin {
         override public function setObject(pObject:IsometricDisplayObject):void {
             super.setObject(pObject);
 
-            var file:TFile = _library.getByID(particleFile);
+            var file:TFile = _library.get(particleFile);
 
             if (!file) {
+                throw new ArgumentError('Illegal particle file!');
                 return;
             }
 
             _emitter = ParticlesEmitter.NEW;
 
             _emitter.ParticleClass = ImageParticle;
-            _emitter.particleData  = _library.getByID(particleTexture).content as Texture;
+            _emitter.particleData  = _library.get(particleTexture).content as Texture;
 
             var particlePosition:RectangleParticles = RectangleParticles.NEW;
-                particlePosition.init(_emitter, new Vector2D(20, 20));
+                particlePosition.init(_emitter, new Vector2D(0, 0));
 
             _emitter.particlesPosition = particlePosition;
 

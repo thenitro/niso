@@ -20,7 +20,7 @@ package niso.world.objects.builtin.processing.bubbles {
             x = 0;
             y = 0;
 
-            var texture:Texture = _library.getByID(pState.bubbleIconID).content as Texture;
+            var texture:Texture = _library.get(pState.bubbleIconID).content as Texture;
 
             var icon:Image = new Image(texture);
                 icon.pivotX = texture.width  / 2;
