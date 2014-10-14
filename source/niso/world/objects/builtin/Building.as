@@ -12,8 +12,10 @@ package niso.world.objects.builtin {
         private var _object:IPlayable;
         private var _bubble:AbstractBubble;
 
-        private var _states:Vector.<ProcessingState>;
+        private var _states:Object;
         private var _currentState:ProcessingState;
+
+        private var _startingStateID:String;
 
         public function Building() {
             super();
@@ -35,9 +37,7 @@ package niso.world.objects.builtin {
             }
 
             super.setObject(pObject);
-
-            //TODO: remove stub
-            startState(_states[0]);
+            startState(_startingStateID);
         };
 
         override public function poolPrepare():void {
@@ -50,17 +50,33 @@ package niso.world.objects.builtin {
             super.dispose();
         };
 
-        public function setStates(pStates:Vector.<ProcessingState>):void {
-            _states = pStates;
+        public function setStates(pStates:Object, pStartingStateID:String):void {
+            _states          = pStates;
+            _startingStateID = pStartingStateID;
         };
 
-        public function startState(pState:ProcessingState):void {
-            _currentState = pState;
+        public function startState(pStateID:String):void {
+            _currentState = _states[pStateID] as ProcessingState;
             _currentState.addEventListener(ProcessingState.START,
                                            buildingStateStartEventHandler);
             _currentState.addEventListener(ProcessingState.STOP,
                                            buildingStateStopEventHandler);
             _currentState.start();
+        };
+
+        public function forceStopState():void {
+            if (!_currentState) {
+                return;
+            }
+
+            removeBubble();
+
+            _currentState.removeEventListener(ProcessingState.START,
+                                              buildingStateStartEventHandler);
+            _currentState.removeEventListener(ProcessingState.STOP,
+                                              buildingStateStopEventHandler);
+            _currentState.stop();
+            _currentState = null;
         };
 
         public function interact():void {
@@ -72,11 +88,11 @@ package niso.world.objects.builtin {
         public function getInteractionPoints():Vector.<Node> {
             var result:Vector.<Node> = new Vector.<Node>();
 
-            var offsetX:int = object.x - int(sizeX / 2);
-            var offsetZ:int = object.z - int(sizeZ / 2);
+            var offsetX:int = object.x - int(width / 2);
+            var offsetZ:int = object.z - int(height / 2);
 
-            for (var i:int = offsetX - 1; i < offsetX + sizeX + 1; i++) {
-                for (var j:int = offsetZ - 1; j < offsetZ + sizeZ + 1; j++) {
+            for (var i:int = offsetX - 1; i < offsetX + width + 1; i++) {
+                for (var j:int = offsetZ - 1; j < offsetZ + height + 1; j++) {
                     if (_pathfinder.isWalkable(i, j)) {
                         result.push(_pathfinder.takeNode(i, j));
                     }
@@ -131,7 +147,7 @@ package niso.world.objects.builtin {
                                           buildingStateStopEventHandler);
 
             removeBubble();
-            startState(_states[state.nextState]);
+            startState(state.nextState);
         };
     };
 }

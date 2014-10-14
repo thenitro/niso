@@ -20,8 +20,6 @@ package niso.world.objects {
 		private var _screenPosition:Vector2D;
 		private var _isometricPosition:TVector3D;
 		
-		private var _id:uint = Math.random() * 10000000;
-		
 		private var _layer:IsometricLayer;
 
 		private var _view:DisplayObjectContainer;
@@ -48,10 +46,6 @@ package niso.world.objects {
         public function get disposed():Boolean {
             return _disposed;
         };
-		
-		public function get id():uint {
-			return _id;
-		};
 		
 		public function get layer():IsometricLayer {
 			return _layer;

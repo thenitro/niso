@@ -7,12 +7,14 @@ package niso.world.objects {
 	public class IsometricBehavior extends EventDispatcher implements IReusable {
 		protected static var _pool:Pool = Pool.getInstance();
 
+        public var id:String;
+
         private var _disposed:Boolean;
 		private var _object:IsometricDisplayObject;
 
         private var _visible:Boolean;
 
-        private var _y:Number = 0;
+        private var _depth:Number = 0;
 		
 		public function IsometricBehavior() {
 			super();
@@ -38,18 +40,18 @@ package niso.world.objects {
             _visible = pValue;
         };
 
-        public function set y(pValue:Number):void {
+        public function set depth(pValue:Number):void {
             if (_object) {
                 _object.y = pValue;
                 _object.updateScreenPosition();
             }
 
-            _y = pValue;
+            _depth = isNaN(pValue) ? 0 : pValue;
         };
 		
 		public function setObject(pObject:IsometricDisplayObject):void {
 			_object = pObject;
-            _object.y = _y;
+            _object.y = _depth;
             _object.updateScreenPosition();
 		};
 		

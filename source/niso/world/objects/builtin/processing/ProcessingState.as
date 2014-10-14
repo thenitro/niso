@@ -30,9 +30,9 @@ package niso.world.objects.builtin.processing {
         private var _bubbleID:String;
         private var _bubbleIconID:String;
 
-        private var _timer:Timer;
+        private var _next:String;
 
-        private var _next:int;
+        private var _timer:Timer;
         private var _time:int;
 
         public function ProcessingState() {
@@ -54,7 +54,7 @@ package niso.world.objects.builtin.processing {
             return _bubbleIconID;
         };
 
-        public function get nextState():int {
+        public function get nextState():String {
             return _next;
         };
 
@@ -62,7 +62,7 @@ package niso.world.objects.builtin.processing {
             return _time;
         };
 
-        public function init(pSequenceID:String, pNextState:int,
+        public function init(pSequenceID:String, pNextState:String,
                              pBubbleID:String = null,
                              pBubbleIconID:String = null, pTime:int = -1):void {
             _sequenceID = pSequenceID;
