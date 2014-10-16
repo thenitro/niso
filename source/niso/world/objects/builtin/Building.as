@@ -16,6 +16,9 @@ package niso.world.objects.builtin {
         private var _currentState:ProcessingState;
 
         private var _startingStateID:String;
+        private var _stateTimeLeft:Number;
+
+        private var _getTime:Function;
 
         public function Building() {
             super();
@@ -37,7 +40,7 @@ package niso.world.objects.builtin {
             }
 
             super.setObject(pObject);
-            startState(_startingStateID);
+            startState(_startingStateID, _stateTimeLeft);
         };
 
         override public function poolPrepare():void {
@@ -50,18 +53,21 @@ package niso.world.objects.builtin {
             super.dispose();
         };
 
-        public function setStates(pStates:Object, pStartingStateID:String):void {
+        public function setStates(pStates:Object, pStartingStateID:String,
+                                  pGetTime:Function, pStateTimeLeft:Number = -1):void {
             _states          = pStates;
             _startingStateID = pStartingStateID;
+            _getTime         = pGetTime;
+            _stateTimeLeft   = pStateTimeLeft;
         };
 
-        public function startState(pStateID:String):void {
+        public function startState(pStateID:String, pStateStartTime:Number):void {
             _currentState = _states[pStateID] as ProcessingState;
             _currentState.addEventListener(ProcessingState.START,
                                            buildingStateStartEventHandler);
             _currentState.addEventListener(ProcessingState.STOP,
                                            buildingStateStopEventHandler);
-            _currentState.start();
+            _currentState.start(pStateStartTime, _getTime);
         };
 
         public function forceStopState():void {
@@ -147,7 +153,7 @@ package niso.world.objects.builtin {
                                           buildingStateStopEventHandler);
 
             removeBubble();
-            startState(state.nextState);
+            startState(state.nextState, -1);
         };
     };
 }

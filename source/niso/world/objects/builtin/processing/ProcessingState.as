@@ -33,7 +33,10 @@ package niso.world.objects.builtin.processing {
         private var _next:String;
 
         private var _timer:Timer;
-        private var _time:int;
+        private var _getTime:Function;
+
+        private var _startTime:Number;
+        private var _time:Number;
 
         public function ProcessingState() {
         };
@@ -58,7 +61,7 @@ package niso.world.objects.builtin.processing {
             return _next;
         };
 
-        public function get time():int {
+        public function get time():Number {
             return _time;
         };
 
@@ -87,7 +90,10 @@ package niso.world.objects.builtin.processing {
             return bubble;
         };
 
-        public function start():void {
+        public function start(pStartTime:Number, pGetTime:Function):void {
+            _startTime = pStartTime;
+            _getTime   = pGetTime;
+
             dispatchEventWith(START);
             startTimer();
         };
@@ -116,7 +122,18 @@ package niso.world.objects.builtin.processing {
                 return;
             }
 
-            _timer = new Timer(1000, time);
+            _time *= 1000;
+
+            var timerTime:Number;
+
+            if (_startTime == -1) {
+                 timerTime = time;
+                _startTime = _getTime();
+            } else {
+                timerTime = _getTime() - _startTime;
+            }
+
+            _timer = new Timer(1000, timerTime / 1000);
             _timer.addEventListener(TimerEvent.TIMER, timerEventHandler);
             _timer.addEventListener(TimerEvent.TIMER_COMPLETE,
                                     timerCompleteEventHandler);
@@ -136,7 +153,11 @@ package niso.world.objects.builtin.processing {
         };
 
         private function timerEventHandler(pEvent:TimerEvent):void {
-            dispatchEventWith(PROGRESS, false, _timer.currentCount / _timer.repeatCount);
+            trace('ProcessingState.timerEventHandler:', _getTime(), _startTime);
+            trace('ProcessingState.timerEventHandler:', time, _getTime() - _startTime);
+            trace('ProcessingState.timerEventHandler:', (_getTime() - _startTime) / time);
+
+            dispatchEventWith(PROGRESS, false, (_getTime() - _startTime) / time);
         };
 
         private function timerCompleteEventHandler(pEvent:TimerEvent):void {
