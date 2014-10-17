@@ -62,7 +62,7 @@ package niso.world.objects.builtin.processing {
         };
 
         public function get time():Number {
-            return _time;
+            return _time * 1000;
         };
 
         public function init(pSequenceID:String, pNextState:String,
@@ -118,11 +118,9 @@ package niso.world.objects.builtin.processing {
         };
 
         private function startTimer():void {
-            if (time == -1) {
+            if (_time == -1) {
                 return;
             }
-
-            _time *= 1000;
 
             var timerTime:Number;
 
