@@ -1,4 +1,6 @@
 package niso.world.controllers {
+    import com.junkbyte.console.Cc;
+
     import flash.geom.Point;
     import flash.utils.Dictionary;
 
@@ -23,6 +25,11 @@ package niso.world.controllers {
         public static const ZOOM_EVENT:String  = 'zoom_event';
         public static const COMPLETED:String   = 'completed';
 
+        public static const TYPE_COORDS:String  = 'coords';
+        public static const TYPE_OBJECTS:String = 'objects';
+
+        public static const TYPE_BOTH:String = 'both';
+
         private static var _pool:Pool = Pool.getInstance();
 
         private var _world:IsometricWorld;
@@ -34,11 +41,17 @@ package niso.world.controllers {
 
         private var _distance:Number = 0;
 
+        private var _type:String;
+
         public function WorldTouchController() {
             _start = Vector2D.ZERO;
             _calc  = Vector2D.ZERO;
 
             super();
+        };
+
+        public function setInteractionType(pType:String):void {
+            _type = pType;
         };
 
         public function init(pWorld:IsometricWorld):void {
@@ -51,25 +64,18 @@ package niso.world.controllers {
         };
 
         private function layerTouchEventHandler(pEvent:TouchEvent):void {
-            var objects:Dictionary = _world.getLayerByID(2).objects;
-
-            for (var object:DisplayObject in objects) {
-                var touch:Touch = pEvent.getTouch(object);
-
-                if (!touch) {
-                    continue;
+            if (!_type) {
+                CONFIG::DEBUG {
+                    Cc.log('WorldTouchController.layerTouchEventHandler: ' +
+                            '_type is not set! Use ' +
+                            'WorldTouchController.setInteractionType(pType:String)');
                 }
+                return;
+            }
 
-                var isometric:IsometricDisplayObject = objects[object] as IsometricDisplayObject;
-                if (!isometric) {
-                    continue;
-                }
-
-                if (touch.phase == TouchPhase.ENDED) {
-                    if (_calc.lengthSquared() < 10) {
-                        dispatchEventWith(INTERACT, false, isometric);
-                    }
-
+            if (_type == TYPE_OBJECTS || _type == TYPE_BOTH) {
+                var object:IsometricDisplayObject = processObjects(pEvent);
+                if (object) {
                     return;
                 }
             }
@@ -80,38 +86,35 @@ package niso.world.controllers {
             }
 
             if (pEvent.touches.length == 2) {
-                if (pEvent.touches[0].phase == TouchPhase.BEGAN ||
-                    pEvent.touches[1].phase == TouchPhase.BEGAN) {
-                    _fingerA = Vector2D.fromPoint(pEvent.touches[0].getLocation(_world.canvas));
-                    _fingerB = Vector2D.fromPoint(pEvent.touches[1].getLocation(_world.canvas));
+                processZoom(pEvent);
+                return;
+            }
+        };
 
-                    _distance = _fingerA.distanceTo(_fingerB);
+        private function processObjects(pEvent:TouchEvent):IsometricDisplayObject {
+            var objects:Dictionary = _world.getLayerByID(2).objects;
 
-                    return;
+            for (var object:DisplayObject in objects) {
+                var touch:Touch = pEvent.getTouch(object);
+                if (!touch) {
+                    continue;
                 }
 
-                if (pEvent.touches[0].phase == TouchPhase.MOVED ||
-                    pEvent.touches[1].phase == TouchPhase.MOVED) {
-
-                    _fingerA = Vector2D.fromPoint(pEvent.touches[0].getLocation(_world.canvas));
-                    _fingerB = Vector2D.fromPoint(pEvent.touches[1].getLocation(_world.canvas));
-
-                    var newDistance:Number = _fingerA.distanceTo(_fingerB);
-                    var scale:Number = _distance / newDistance;
-
-                    _distance = newDistance;
-
-                    dispatchEventWith(ZOOM_EVENT, false, scale);
-
-                    return;
+                var isometric:IsometricDisplayObject =
+                        objects[object] as IsometricDisplayObject;
+                if (!isometric) {
+                    continue;
                 }
 
-                if (pEvent.touches[0].phase == TouchPhase.ENDED ||
-                    pEvent.touches[1].phase == TouchPhase.ENDED) {
-                    dispatchEventWith(COMPLETED);
-                    return;
+                if (touch.phase == TouchPhase.ENDED) {
+                    if (_calc.lengthSquared() < 10) {
+                        dispatchEventWith(INTERACT, false, isometric);
+                        return isometric;
+                    }
                 }
             }
+
+            return null;
         };
 
         private function processTapOrPan(pTouch:Touch):void {
@@ -147,10 +150,46 @@ package niso.world.controllers {
 
             if (pTouch.phase == TouchPhase.ENDED) {
                 if (_calc.lengthSquared() < 10) {
-                    dispatchEventWith(TOUCH_EVENT, false, _start);
+                    if (_type == TYPE_COORDS || _type == TYPE_BOTH) {
+                        dispatchEventWith(TOUCH_EVENT, false, _start);
+                    }
                 } else {
                     dispatchEventWith(COMPLETED, false, offset);
                 }
+            }
+        };
+
+        private function processZoom(pEvent:TouchEvent):void {
+            if (pEvent.touches[0].phase == TouchPhase.BEGAN ||
+                    pEvent.touches[1].phase == TouchPhase.BEGAN) {
+                _fingerA = Vector2D.fromPoint(pEvent.touches[0].getLocation(_world.canvas));
+                _fingerB = Vector2D.fromPoint(pEvent.touches[1].getLocation(_world.canvas));
+
+                _distance = _fingerA.distanceTo(_fingerB);
+
+                return;
+            }
+
+            if (pEvent.touches[0].phase == TouchPhase.MOVED ||
+                    pEvent.touches[1].phase == TouchPhase.MOVED) {
+
+                _fingerA = Vector2D.fromPoint(pEvent.touches[0].getLocation(_world.canvas));
+                _fingerB = Vector2D.fromPoint(pEvent.touches[1].getLocation(_world.canvas));
+
+                var newDistance:Number = _fingerA.distanceTo(_fingerB);
+                var scale:Number = _distance / newDistance;
+
+                _distance = newDistance;
+
+                dispatchEventWith(ZOOM_EVENT, false, scale);
+
+                return;
+            }
+
+            if (pEvent.touches[0].phase == TouchPhase.ENDED ||
+                    pEvent.touches[1].phase == TouchPhase.ENDED) {
+                dispatchEventWith(COMPLETED);
+                return;
             }
         };
     };
