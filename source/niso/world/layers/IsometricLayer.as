@@ -21,9 +21,7 @@ package niso.world.layers {
         private var _disposed:Boolean;
 
 		private var _canvas:Sprite;
-		
-		private var _matrix:MatrixMxN;
-		
+
 		private var _objects:Dictionary;
 		private var _id:uint;
 		
@@ -37,8 +35,7 @@ package niso.world.layers {
 		public function IsometricLayer() {
 			_canvas  = new Sprite();
 			_objects = new Dictionary();
-			
-			_matrix = MatrixMxN.EMPTY;
+
             _objectsNum = 0;
 		};
 
@@ -124,8 +121,6 @@ package niso.world.layers {
 			pObject.updateScreenPosition();
 			
 			_canvas.addChild(pObject.view);
-			
-			_matrix.add(pObject.x, pObject.z, pObject);
 
             _objectsNum++;
 			
@@ -139,17 +134,11 @@ package niso.world.layers {
 			
 			_canvas.removeChild(pObject.view);
 
-			_matrix.remove(pObject.x, pObject.z);
-
             _objectsNum--;
 			
 			if (_sortingType == IsometricLayerSortingType.ON_CHANGE) {
 				sort();
 			}
-		};
-		
-		public function getObjectByIndex(pIndexX:int, pIndexY:int):IsometricDisplayObject {
-			return _matrix.take(pIndexX, pIndexY) as IsometricDisplayObject;
 		};
 		
 		public function sort():void {
@@ -166,8 +155,6 @@ package niso.world.layers {
             for each (var objectID:Object in _objects) {
                 delete _objects[objectID];
             }
-			
-			_matrix.clean();
 
             _objectsNum = 0;
 
@@ -185,8 +172,6 @@ package niso.world.layers {
 			_canvas = null;
 			
 			_objects = null;
-			
-			_pool.put(_matrix);
 
             _disposed = true;
 		};
