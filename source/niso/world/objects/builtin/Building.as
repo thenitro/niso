@@ -1,14 +1,13 @@
 package niso.world.objects.builtin {
     import niso.world.objects.IsometricDisplayObject;
+    import niso.world.objects.abstract.IInteractable;
     import niso.world.objects.abstract.IPlayable;
     import niso.world.objects.builtin.processing.*;
     import niso.world.objects.builtin.processing.bubbles.AbstractBubble;
 
-    import npathfinding.base.Node;
-
     import starling.events.Event;
 
-    public class Building extends Obstacle {
+    public class Building extends Interactable implements IInteractable {
         private var _object:IPlayable;
         private var _bubble:AbstractBubble;
 
@@ -85,27 +84,10 @@ package niso.world.objects.builtin {
             _currentState = null;
         };
 
-        public function interact():void {
+        override public function interact():void {
             if (_currentState.time == -1) {
                 _currentState.stop();
             }
-        };
-
-        public function getInteractionPoints():Vector.<Node> {
-            var result:Vector.<Node> = new Vector.<Node>();
-
-            var offsetX:int = object.x - int(width / 2);
-            var offsetZ:int = object.z - int(height / 2);
-
-            for (var i:int = offsetX - 1; i < offsetX + width + 1; i++) {
-                for (var j:int = offsetZ - 1; j < offsetZ + height + 1; j++) {
-                    if (_pathfinder.isWalkable(i, j)) {
-                        result.push(_pathfinder.takeNode(i, j));
-                    }
-                }
-            }
-
-            return result;
         };
 
         private function applyState(pState:ProcessingState):void {

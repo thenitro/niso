@@ -54,6 +54,14 @@ package niso.world.objects {
             _object.y = _depth;
             _object.updateScreenPosition();
 		};
+
+        public function removeFromPosition():void {
+
+        };
+
+        public function setPosition():void {
+
+        };
 		
 		public function poolPrepare():void {
 			removeEventListeners();

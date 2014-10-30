@@ -132,9 +132,9 @@ package niso.world.objects {
 			if (!_layer || !_layer.world || !_layer.world.geometry) {
 				return;
 			}
-			
+
 			_layer.world.geometry.isometricToScreen(_isometricPosition, _screenPosition);
-			
+
 			_view.x = _screenPosition.x;
 			_view.y = _screenPosition.y;
 			

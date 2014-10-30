@@ -20,7 +20,6 @@ package niso.world.objects.builtin {
 
         override public function poolPrepare():void {
             setState(_pathfinder.setWalkable);
-
             super.poolPrepare();
         };
 
@@ -34,7 +33,7 @@ package niso.world.objects.builtin {
             setState(_pathfinder.setUnWalkable);
 		};
 
-        private function setState(pState:Function):void {
+        public function setState(pState:Function):void {
             if (width == 0 && height == 0) {
                 return;
             }
