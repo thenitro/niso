@@ -1,7 +1,7 @@
 package niso.world.objects.builtin.task.tasks {
     import niso.world.objects.PlayableEvents;
+    import niso.world.objects.abstract.IInteractable;
     import niso.world.objects.abstract.IPlayable;
-    import niso.world.objects.builtin.Building;
     import niso.world.objects.builtin.Character;
     import niso.world.objects.builtin.task.Task;
 
@@ -10,7 +10,7 @@ package niso.world.objects.builtin.task.tasks {
     public class InteractTask extends Task {
         public static const STATE_ID:int = 3;
 
-        public var target:Building;
+        public var target:IInteractable;
 
         private var _object:IPlayable;
 
