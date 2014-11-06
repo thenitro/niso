@@ -177,9 +177,7 @@ package niso.world.controllers {
                 _fingerB = Vector2D.fromPoint(pEvent.touches[1].getLocation(_world.canvas));
 
                 var newDistance:Number = _fingerA.distanceTo(_fingerB);
-                var scale:Number = _distance / newDistance;
-
-                _distance = newDistance;
+                var scale:Number = newDistance / _distance;
 
                 dispatchEventWith(ZOOM_EVENT, false, scale);
 
@@ -189,6 +187,9 @@ package niso.world.controllers {
             if (pEvent.touches[0].phase == TouchPhase.ENDED ||
                     pEvent.touches[1].phase == TouchPhase.ENDED) {
                 dispatchEventWith(COMPLETED);
+
+                _distance = newDistance;
+
                 return;
             }
         };

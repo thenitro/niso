@@ -98,6 +98,8 @@ package niso.world {
         public function scale(pScale:Number, pScaleFactor:Number):void {
             _scale       = pScale;
             _scaleFactor = pScaleFactor;
+
+            _canvas.scaleX = _canvas.scaleY = _scale;
         };
 
 		public function center(pByX:Boolean = true, pByY:Boolean = true):void {

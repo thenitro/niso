@@ -85,22 +85,13 @@ package niso.world.objects.builtin.task.tasks {
         private function nextPoint():void {
             _next = path.shift();
 
-            if (_next) {
-                removeTween();
-
+            if (_next && !_canceled) {
                 var destination:TVector3D = TVector3D.ZERO;
 
                     destination.x = _next.indexX;
                     destination.z = _next.indexY;
 
-                var position:TVector3D = behavior.object.isometricPosition;
-
-                if (!position) {
-                    cancel();
-                    nextPoint();
-                    return;
-                }
-
+                var position:TVector3D  = behavior.object.isometricPosition;
                 var distance:Number     =  position.distanceTo(destination);
                 var direction:Direction = _directions.getDirection(position, destination);
 
@@ -140,9 +131,9 @@ package niso.world.objects.builtin.task.tasks {
                 return;
             }
 
+            _currentTween.removeEventListeners();
             Starling.juggler.remove(_currentTween);
 
-            _currentTween.removeEventListeners();
             _currentTween = null;
         };
     }
