@@ -1,9 +1,9 @@
 package niso.files {
     import flash.display.Bitmap;
+    import flash.display.BitmapData;
     import flash.display.Loader;
     import flash.display.LoaderInfo;
     import flash.events.Event;
-    import flash.utils.ByteArray;
     import flash.utils.ByteArray;
 
     import ngine.files.TFile;
@@ -17,12 +17,17 @@ package niso.files {
     public class NIOFormat extends EventDispatcher implements IReusable {
         public static const PARSING_COMPLETED:String = 'parsing_completed';
 
+
+        private static const EMPTY_BITMAP:BitmapData = new BitmapData(2, 2, true, 0x00000000);
+        private static const EMPTY_TEXTURE:Texture   = Texture.fromBitmapData(EMPTY_BITMAP);
+
         private var _disposed:Boolean;
 
         private var _offsetX:Number;
         private var _offsetY:Number;
 
         private var _texture:Texture;
+        private var _bitmapData:BitmapData;
 
         private var _isAtlas:Boolean;
         private var _atlas:TextureAtlas;
@@ -31,8 +36,15 @@ package niso.files {
 
         private var _file:TFile;
 
-        public function NIOFormat() {
+        public function NIOFormat(pOffsetX:Number = 0, pOffsetY:Number = 0,
+                                  pTexture:Texture = null) {
             super();
+
+            _offsetX = pOffsetX;
+            _offsetY = pOffsetY;
+
+            _texture    = pTexture || EMPTY_TEXTURE;
+            _bitmapData = EMPTY_BITMAP;
         };
 
         public function get reflection():Class {
@@ -61,6 +73,10 @@ package niso.files {
 
         public function get atlas():TextureAtlas {
             return _atlas;
+        };
+
+        public function get bitmapData():BitmapData {
+            return _bitmapData;
         };
 
         public function load(pFile:TFile):void {
@@ -111,7 +127,10 @@ package niso.files {
                 loaderInfo.removeEventListener(Event.COMPLETE,
                                                loaderCompletedEventHandler);
 
-            _texture = Texture.fromBitmap(loaderInfo.content as Bitmap, false);
+            var bitmap:Bitmap = loaderInfo.content as Bitmap;
+
+            _texture    = Texture.fromBitmap(bitmap, false);
+            _bitmapData = bitmap.bitmapData;
 
             if (_isAtlas) {
                 _atlas = new TextureAtlas(_texture, _description);

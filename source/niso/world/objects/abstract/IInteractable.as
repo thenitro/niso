@@ -1,4 +1,6 @@
 package niso.world.objects.abstract {
+    import nmath.vectors.Vector2D;
+
     import npathfinding.base.Node;
 
     public interface IInteractable {

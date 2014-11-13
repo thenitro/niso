@@ -4,10 +4,18 @@ package niso.world.objects {
     import dragonBones.events.AnimationEvent;
     import dragonBones.factorys.StarlingFactory;
 
+    import flash.display.BitmapData;
+
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+
     import niso.world.objects.abstract.IPlayable;
 
     import starling.display.DisplayObjectContainer;
+    import starling.display.Image;
     import starling.display.Sprite;
+    import starling.events.Touch;
+    import starling.textures.SubTexture;
 
     public class IsometricDragonBones extends IsometricDisplayObject implements IPlayable {
         private var _view:Sprite;
@@ -18,12 +26,52 @@ package niso.world.objects {
         private var _armature:Armature;
         private var _sprite:Sprite;
 
+        private var _factory:StarlingFactory;
+
         public function IsometricDragonBones() {
             super();
         };
 
         override public function get reflection():Class {
             return IsometricDragonBones;
+        };
+
+        override public function hitTest(pTouch:Touch):Boolean {
+            if (!super.hitTest(pTouch)) {
+                return false;
+            }
+
+            var bitmap:BitmapData = _factory.getTextureAtlas(_factory.currentTextureAtlasName).bitmapData;
+
+            for (var i:int = 0; i < _sprite.numChildren; i++) {
+                var image:Image = _sprite.getChildAt(i) as Image;
+                if (!image) {
+                    continue;
+                }
+
+                var texture:SubTexture = image.texture as SubTexture;
+                if (!texture) {
+                    continue;
+                }
+
+                var clip:Rectangle = texture.clipping;
+
+                var point:Point = pTouch.getLocation(image);
+
+                    point.x += bitmap.width  * clip.x;
+                    point.y += bitmap.height * clip.y;
+
+                var pixel:uint = bitmap.getPixel32(point.x, point.y);
+                var alpha:int  = (pixel >> 24) & 0xFF;
+
+                if (!alpha) {
+                    continue;
+                }
+
+                return true;
+            }
+
+            return false;
         };
 
         override public function set visible(pValue:Boolean):void {
@@ -46,6 +94,8 @@ package niso.world.objects {
         public function buildArmature(pArmatureID:String,
                                       pFactory:StarlingFactory):void {
             clean();
+
+            _factory = pFactory;
 
             _armature = pFactory.buildArmature(pArmatureID);
             _sprite   = _armature.display as Sprite;
@@ -85,7 +135,8 @@ package niso.world.objects {
                 _armature = null;
             }
 
-            _sprite   = null;
+            _sprite  = null;
+            _factory = null;
         };
 
         private function animationEventCompleteEventHandler(pEvent:AnimationEvent):void {

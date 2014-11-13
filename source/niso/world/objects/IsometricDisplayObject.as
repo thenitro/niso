@@ -1,4 +1,6 @@
 package niso.world.objects {
+    import flash.geom.Point;
+
     import niso.world.layers.IsometricLayer;
 
     import nmath.vectors.TVector3D;
@@ -11,6 +13,7 @@ package niso.world.objects {
     import starling.display.DisplayObjectContainer;
     import starling.events.Event;
     import starling.events.EventDispatcher;
+    import starling.events.Touch;
 
     public class IsometricDisplayObject extends EventDispatcher implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();
@@ -117,6 +120,10 @@ package niso.world.objects {
 
         public function get behavior():IsometricBehavior {
             return _behavior;
+        };
+
+        public function hitTest(pTouch:Touch):Boolean {
+            return _view.hitTest(pTouch.getLocation(view), true);
         };
 
 		public function setLayer(pLayer:IsometricLayer):void {

@@ -1,11 +1,16 @@
 package niso.world.objects {
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+
+    import niso.files.NIOFormat;
     import niso.world.objects.abstract.IPlayable;
 
     import starling.core.Starling;
-    import starling.display.DisplayObject;
     import starling.display.DisplayObjectContainer;
     import starling.display.MovieClip;
     import starling.display.Sprite;
+    import starling.events.Touch;
+    import starling.textures.SubTexture;
     import starling.textures.TextureAtlas;
     import starling.textures.TextureSmoothing;
 
@@ -23,12 +28,41 @@ package niso.world.objects {
         private var _atlas:TextureAtlas;
         private var _movie:MovieClip;
 
+        private var _nio:NIOFormat;
+
         public function IsometricMovieClip() {
             super();
         };
 
         override public function get reflection():Class {
             return IsometricMovieClip;
+        };
+
+
+        override public function hitTest(pTouch:Touch):Boolean {
+            if (!super.hitTest(pTouch)) {
+                return false;
+            }
+
+            var texture:SubTexture = _movie.texture as SubTexture;
+            if (!texture) {
+                return false;
+            }
+
+            var clip:Rectangle = texture.clipping;
+
+            var point:Point = pTouch.getLocation(_movie);
+                point.x += _nio.bitmapData.width  * clip.x;
+                point.y += _nio.bitmapData.height * clip.y;
+
+            var pixel:uint = _nio.bitmapData.getPixel32(point.x, point.y);
+            var alpha:int  = (pixel >> 24) & 0xFF;
+
+            if (!alpha) {
+                return false;
+            }
+
+            return true;
         };
 
         override public function set visible(pValue:Boolean):void {
@@ -46,14 +80,15 @@ package niso.world.objects {
             super.poolPrepare();
         };
 
-        public function setAtlas(pAtlas:TextureAtlas,
-                                 pPivotX:Number, pPivotY:Number,
+        public function setAtlas(pNIO:NIOFormat,
                                  pFrameRate:int,
                                  pAnimation:String = null):void {
-            _atlas = pAtlas;
+            _nio = pNIO;
 
-            _pivotX = pPivotX;
-            _pivotY = pPivotY;
+            _atlas = pNIO.atlas;
+
+            _pivotX = pNIO.offsetX;
+            _pivotY = pNIO.offsetY;
 
             _frameRate = pFrameRate;
 
@@ -104,6 +139,8 @@ package niso.world.objects {
             _atlas = null;
 
             _animation = null;
+
+            _nio = null;
         };
     };
 }
